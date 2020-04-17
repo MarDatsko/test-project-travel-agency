@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-         pageEncoding="ISO-8859-1"%>
-<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+         pageEncoding="ISO-8859-1" %>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,10 +12,22 @@
 <h1>Travel Agency</h1>
 <h4>Login Form</h4>
 
-<form action='<spring:url value="/loginAction"/>' method="post">
+<script>
+    function ValidateEmail() {
+        var email = document.form.username.value;
+
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            return true;
+        }
+        alert("You have entered an invalid email address!")
+        return false;
+    }
+</script>
+
+<form name="form" action='<spring:url value="/loginAction"/>' method="post" onsubmit="return ValidateEmail()">
     <table>
         <tr>
-            <td>Username</td>
+            <td>Email</td>
             <td><input type="text" name="username"></td>
         </tr>
         <tr>
@@ -23,7 +35,9 @@
             <td><input type="password" name="password"></td>
         </tr>
         <tr>
-            <td><button type="submit">Login</button></td>
+            <td>
+                <button type="submit">Login</button>
+            </td>
         </tr>
     </table>
 </form>
