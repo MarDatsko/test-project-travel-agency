@@ -1,5 +1,7 @@
 <html>
-<body>
-<h2>Hello World!</h2>
-</body>
+    <body>
+        <h1>Travel Agency</h1>
+        <h3>Main Page</h3>
+    </body>
 </html>
+
