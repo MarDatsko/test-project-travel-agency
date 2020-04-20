@@ -66,6 +66,10 @@
       <td><input type="password" name="password"/></td>
    </tr>
 
+      <c:if test="${condition}">
+
+      </c:if>
+
    <tr>
       <td>Confirm Password</td>
       <td><input type="password" name="conpassword"/></td>

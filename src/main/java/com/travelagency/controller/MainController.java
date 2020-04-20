@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class MainController {
 
@@ -50,4 +52,17 @@ public class MainController {
                 + userRegisterDto.getEmail() + " already created");
         return "infoPage";
     }
+
+    @GetMapping("/mainPage")
+    public String sendUser(Model model, HttpSession session) {
+        System.out.println(session.getAttributeNames());
+        return "userMainPage";
+    }
+
+    @PostMapping("/mainPage")
+    public String sendUsers(Model model, HttpSession session) {
+        System.out.println(session.getAttributeNames());
+        return "userMainPage";
+    }
+
 }

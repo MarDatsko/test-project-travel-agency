@@ -26,7 +26,7 @@ Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
             <tr>
                 <td>${country.id}</td>
                 <td>${country.name}</td>
-                <td>${country.visa.name}</td>
+                <td>${country.visa}</td>
 
                 <td>
                     <a href="/edit?id=${customer.id}">Edit</a>
