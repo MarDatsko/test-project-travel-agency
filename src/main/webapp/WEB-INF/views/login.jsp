@@ -24,7 +24,7 @@
     }
 </script>
 
-<form name="form" action='<spring:url value="/loginAction"/>' method="post" onsubmit="return ValidateEmail()">
+<form name="form" action='<spring:url value="/login"/>' method="post" onsubmit="return ValidateEmail()">
     <table>
         <tr>
             <td>Email</td>
@@ -34,11 +34,18 @@
             <td>Password</td>
             <td><input type="password" name="password"></td>
         </tr>
+
         <tr>
             <td>
                 <button type="submit">Login</button>
             </td>
+            <td>
+            <button onclick="location.href='/register'" type="button">
+                Register</button>
+            </td>
         </tr>
+
+
     </table>
 </form>
 <br/>
