@@ -17,7 +17,7 @@ public class CountryDto {
 
     private Long id;
     private String name;
-    private String visa;
+    private VisaDto visa;
     private List<HotelDto> hotels;
 
 
@@ -25,7 +25,7 @@ public class CountryDto {
         CountryDto countryDto = new CountryDto();
             countryDto.setId(country.getId());
             countryDto.setName(country.getName());
-            countryDto.setVisa(country.getVisa().getName());
+            countryDto.setVisa(new VisaDto().mapVisaToVisaDto(country.getVisa()));
             countryDto.setHotels(country.getHotels().stream()
                     .map(hotel -> new HotelDto().mapHotelToHotelDto(hotel)).collect(Collectors.toList()));
         return countryDto;
