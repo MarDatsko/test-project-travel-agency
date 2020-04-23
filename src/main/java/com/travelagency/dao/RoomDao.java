@@ -1,10 +1,10 @@
-package com.travelagency.service;
+package com.travelagency.dao;
 
 import com.travelagency.entity.Room;
 
 import java.util.List;
 
-public interface RoomService {
+public interface RoomDao {
 
     Room getRoomById(Long id);
 

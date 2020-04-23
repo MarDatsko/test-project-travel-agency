@@ -21,7 +21,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) {
 
-        User user = userService.getByEmail(email);
+        User user = userService.getUserByEmail(email);
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(user.getUserRole().toString());
         grantedAuthorities.add(simpleGrantedAuthority);

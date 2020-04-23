@@ -23,7 +23,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @PropertySource({"classpath:database.properties"})
 @ComponentScan({"com.travelagency"})
-@EnableJpaRepositories(basePackages = "com.travelagency.repository")
+@EnableJpaRepositories(basePackages = "com.travelagency.dao")
 public class PersistenceJpaConfig {
 
     @Autowired

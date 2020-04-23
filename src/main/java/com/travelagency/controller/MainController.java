@@ -33,7 +33,7 @@ public class MainController {
     public String registerUser(UserRegisterDto userRegisterDto, Model model) {
 
         try {
-            userService.getByEmail(userRegisterDto.getEmail());
+            userService.getUserByEmail(userRegisterDto.getEmail());
         } catch (ResourceNotFoundException e) {
             User user = new User();
 
@@ -43,7 +43,7 @@ public class MainController {
             user.setPassword(userRegisterDto.getPassword());
             user.setUserRole(UserRole.USER);
 
-            userService.create(user);
+            userService.createUser(user);
 
             return "redirect:/login";
         }

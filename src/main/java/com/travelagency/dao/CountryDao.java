@@ -1,11 +1,10 @@
-package com.travelagency.service;
+package com.travelagency.dao;
 
-import com.travelagency.dto.CountryDto;
 import com.travelagency.entity.Country;
 
 import java.util.List;
 
-public interface CountryService {
+public interface CountryDao {
 
     Country createCountry(Country country);
 

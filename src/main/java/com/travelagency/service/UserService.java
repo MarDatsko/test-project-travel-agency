@@ -4,9 +4,11 @@ import com.travelagency.entity.User;
 
 public interface UserService {
 
-    User create(User user);
+    User getUserById (Long id);
 
-    User getByID(Long id);
+    User createUser (User user);
 
-    User getByEmail(String email);
+    User getUserByEmail(String email);
+
+    void deleteById (Long id);
 }

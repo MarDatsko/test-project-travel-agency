@@ -1,10 +1,10 @@
-package com.travelagency.service;
+package com.travelagency.dao;
 
 import com.travelagency.entity.Visa;
 
 import java.util.List;
 
-public interface VisaService {
+public interface VisaDao {
 
     Visa getVisaById(Long id);
 

@@ -3,18 +3,13 @@ package com.travelagency.controller;
 import com.travelagency.dto.CountryDto;
 import com.travelagency.dto.VisaDto;
 import com.travelagency.entity.Country;
-import com.travelagency.entity.Visa;
 import com.travelagency.service.CountryService;
 import com.travelagency.service.VisaService;
-import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -32,7 +27,7 @@ public class CountryController {
     @RequestMapping("/countries")
     public ModelAndView countries() {
         List<CountryDto> listCountries = new ArrayList<>();
-        countryService.findAll().forEach(country -> listCountries.add(new CountryDto().mapCountryToCountryDto(country)));
+        countryService.getAllCountries().forEach(country -> listCountries.add(new CountryDto().mapCountryToCountryDto(country)));
         listCountries.forEach(System.out::println);
 
 
@@ -61,7 +56,7 @@ public class CountryController {
     @ModelAttribute("viasaList")
     public List<VisaDto> getVisaList() {
         List<VisaDto> visaList = new ArrayList<>();
-        visaService.findAll().forEach(visa -> visaList.add(new VisaDto().mapVisaToVisaDto(visa)));
+        visaService.getAllVisas().forEach(visa -> visaList.add(new VisaDto().mapVisaToVisaDto(visa)));
         return visaList;
     }
 }
