@@ -13,7 +13,6 @@ import java.util.List;
 public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hotel_id")
     private Long id;
 
     @Column(name = "hotel_name")
@@ -23,7 +22,6 @@ public class Hotel {
     @JoinColumn
     private Country country;
 
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Room> rooms;
-
 }

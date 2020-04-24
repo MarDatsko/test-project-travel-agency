@@ -5,6 +5,7 @@ import com.travelagency.dto.VisaDto;
 import com.travelagency.entity.Country;
 import com.travelagency.service.CountryService;
 import com.travelagency.service.VisaService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,12 +23,16 @@ public class CountryController {
     private CountryService countryService;
 
     @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
     private VisaService visaService;
 
     @RequestMapping("/countries")
     public ModelAndView countries() {
         List<CountryDto> listCountries = new ArrayList<>();
-        countryService.getAllCountries().forEach(country -> listCountries.add(new CountryDto().mapCountryToCountryDto(country)));
+        countryService.getAllCountries().forEach(country -> listCountries.add(
+                modelMapper.map(country, CountryDto.class)));
         listCountries.forEach(System.out::println);
 
 
@@ -56,7 +61,8 @@ public class CountryController {
     @ModelAttribute("viasaList")
     public List<VisaDto> getVisaList() {
         List<VisaDto> visaList = new ArrayList<>();
-        visaService.getAllVisas().forEach(visa -> visaList.add(new VisaDto().mapVisaToVisaDto(visa)));
+        visaService.getAllVisas().forEach(visa -> visaList.add(
+                modelMapper.map(visa, VisaDto.class)));
         return visaList;
     }
 }

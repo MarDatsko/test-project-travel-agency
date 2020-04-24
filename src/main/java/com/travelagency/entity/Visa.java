@@ -13,13 +13,11 @@ import java.util.List;
 public class Visa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "visa_id")
     private Long id;
 
     @Column(name = "visa_name")
     private String name;
 
-    @OneToMany(mappedBy = "visa", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "visa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Country> countries;
-
 }

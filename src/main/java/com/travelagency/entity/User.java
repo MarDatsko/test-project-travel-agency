@@ -8,14 +8,13 @@ import org.hibernate.validator.constraints.Email;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user_tb")
+@Table(name = "tb_users")
 @Data
 @NoArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Column(name = "first_name")
