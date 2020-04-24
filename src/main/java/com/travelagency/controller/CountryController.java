@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -33,9 +34,6 @@ public class CountryController {
         List<CountryDto> listCountries = new ArrayList<>();
         countryService.getAllCountries().forEach(country -> listCountries.add(
                 modelMapper.map(country, CountryDto.class)));
-        listCountries.forEach(System.out::println);
-
-
         ModelAndView mav = new ModelAndView("countries");
         mav.addObject("listCountries", listCountries);
         return mav;
@@ -43,18 +41,36 @@ public class CountryController {
 
     @RequestMapping("/new_country")
     public String newCountryForm(Map<String, Object> model) {
-        Country country = new Country();
+        CountryDto country = new CountryDto();
         model.put("country", country);
-        System.out.println(country);
         return "new_country";
     }
 
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String saveCountry(@ModelAttribute("country") Country country) {
-        System.out.println(country);
-        countryService.createCountry(country);
-        System.out.println(country);
+    public String saveCountry(@ModelAttribute("country") CountryDto countryDto) {
+        countryService.createCountry(modelMapper.map(countryDto, Country.class));
+        return "redirect:/countries";
+    }
+
+    @RequestMapping("/edit")
+    public ModelAndView editCountryForm(@RequestParam long id) {
+        ModelAndView mav = new ModelAndView("edit_country");
+        CountryDto country = modelMapper.map(countryService.getCountryById(id), CountryDto.class);
+        mav.addObject("country", country);
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/saveEditing", method = RequestMethod.POST)
+    public String saveEditing(@ModelAttribute("country") CountryDto countryDto){
+        countryService.updateCountry(modelMapper.map(countryDto, Country.class));
+        return "redirect:/countries";
+    }
+
+    @RequestMapping("/delete")
+    public String deleteCustomerForm(@RequestParam Long id) {
+        countryService.deleteCountryById(id);
         return "redirect:/countries";
     }
 

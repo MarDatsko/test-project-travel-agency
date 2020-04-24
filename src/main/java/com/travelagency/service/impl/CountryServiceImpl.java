@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 public class CountryServiceImpl implements CountryService {
 
@@ -18,6 +20,12 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public Country createCountry(Country country) {
         countryDao.createCountry(country);
+        return country;
+    }
+
+    @Override
+    public Country updateCountry(Country country) {
+        countryDao.updateCountry(country);
         return country;
     }
 

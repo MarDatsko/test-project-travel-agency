@@ -1,6 +1,7 @@
 package com.travelagency.config;
 
 import com.travelagency.mapping.CountryDtoMapper;
+import com.travelagency.mapping.CountryFromDtoMapper;
 import com.travelagency.mapping.HotelDtoMapper;
 import com.travelagency.mapping.RoomDtoMapper;
 import com.travelagency.mapping.VisaDtoMapper;
@@ -18,6 +19,7 @@ public class MapperConfig {
     private HotelDtoMapper hotelDtoMapper;
     private RoomDtoMapper roomDtoMapper;
     private VisaDtoMapper visaDtoMapper;
+    private CountryFromDtoMapper countryFromDtoMapper;
 
     @Bean
     public ModelMapper modelMapper() {
@@ -31,6 +33,7 @@ public class MapperConfig {
         mapper.addConverter(hotelDtoMapper);
         mapper.addConverter(roomDtoMapper);
         mapper.addConverter(visaDtoMapper);
+        mapper.addConverter(countryFromDtoMapper);
         return mapper;
     }
 }
