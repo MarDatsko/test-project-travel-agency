@@ -5,24 +5,21 @@
 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>Countries</title>
+    <title>Country</title>
 </head>
 <body>
 <div align="center">
-    <h2>Country Manager</h2>
-    <h3><a href="/new_country">New Country</a></h3>
+    <h2>Country  - ${country.name}</h2>
     <table border="1" cellpadding="5">
         <tr>
             <th>ID</th>
-            <th>Country</th>
-            <th>Visa</th>
-            <th>Action</th>
+            <th>Hotel</th>
+            <th>Actions</th>
         </tr>
-        <c:forEach var="country" items="${listCountries}" >
+        <c:forEach var="hotel" items="${listHotels}" >
             <tr>
-                <td>${country.id}</td>
-                <td><a href="/country?id=${country.id}">${country.name}</a></td>
-                <td>${country.visa.name}</td>
+                <td>${hotel.id}</td>
+                <td>${hotel.name}</td>
 
                 <td>
                     <a href="/edit?id=${country.id}">Edit</a>

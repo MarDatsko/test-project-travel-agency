@@ -1,9 +1,11 @@
 package com.travelagency.controller;
 
 import com.travelagency.dto.CountryDto;
+import com.travelagency.dto.HotelDto;
 import com.travelagency.dto.VisaDto;
 import com.travelagency.entity.Country;
 import com.travelagency.service.CountryService;
+import com.travelagency.service.HotelService;
 import com.travelagency.service.VisaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class CountryController {
 
     @Autowired
     private VisaService visaService;
+
+    @Autowired
+    private HotelService hotelService;
 
     @RequestMapping("/countries")
     public ModelAndView countries() {
@@ -81,4 +86,5 @@ public class CountryController {
                 modelMapper.map(visa, VisaDto.class)));
         return visaList;
     }
+
 }
