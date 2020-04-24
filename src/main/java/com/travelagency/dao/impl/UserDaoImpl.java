@@ -39,7 +39,7 @@ public class UserDaoImpl implements UserDao {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         User user = (User) entityManager
-                .createNativeQuery("SELECT * FROM user_tb WHERE email= :email", User.class)
+                .createNativeQuery("SELECT * FROM tb_users WHERE email= :email", User.class)
                 .setParameter("email", email).getSingleResult();
         entityManager.getTransaction().commit();
         entityManager.close();
@@ -51,7 +51,7 @@ public class UserDaoImpl implements UserDao {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         entityManager
-                .createNativeQuery("DELETE FROM user_tb WHERE id= :id", User.class)
+                .createNativeQuery("DELETE FROM tb_users WHERE id= :id", User.class)
                 .setParameter("id", id);
         entityManager.getTransaction().commit();
         entityManager.close();
