@@ -27,7 +27,7 @@ Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
                 <td>
                     <a href="/edit?id=${country.id}">Edit</a>
                     &nbsp;&nbsp;&nbsp;
-                    <a href="/delete?id=${customer.id}">Delete</a>
+                    <a href="/delete?id=${country.id}">Delete</a>
                 </td>
             </tr>
         </c:forEach>
