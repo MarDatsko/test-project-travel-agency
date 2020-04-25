@@ -38,6 +38,19 @@ public class HotelDaoImpl implements HotelDao {
     }
 
     @Override
+    public List<Hotel> getAllHotelsByCountryId(Long id) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        List<Hotel> listHotels = entityManager
+            .createNativeQuery("SELECT * FROM tb_hotels WHERE country_id = :id", Hotel.class)
+            .setParameter("id", id)
+            .getResultList();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return listHotels;
+    }
+
+    @Override
     public void deleteHotelById(Long id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();

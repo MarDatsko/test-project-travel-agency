@@ -36,6 +36,15 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
+    public List<Hotel> getAllHotelsByCountryId(Long id) {
+        List<Hotel> allHotel = hotelDao.getAllHotelsByCountryId(id);
+        if (allHotel == null || allHotel.isEmpty()) {
+            throw new ResourceNotFoundException("Didn't find any hotels");
+        }
+        return hotelDao.getAllHotelsByCountryId(id);
+    }
+
+    @Override
     public void deleteHotelById(Long id) {
         hotelDao.deleteHotelById(id);
     }

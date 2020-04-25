@@ -10,6 +10,8 @@ public interface HotelDao {
 
     List<Hotel> getAllHotel();
 
+    List<Hotel> getAllHotelsByCountryId(Long id);
+
     void deleteHotelById(Long id);
 
     Hotel createHotel(Hotel hotel);
