@@ -95,6 +95,20 @@ public class MainController {
         return "listFreeHotel";
     }
 
+
+    @PostMapping("/freeHotel")
+    public String showHlotel(DateAndCountryDto dateAndCountryDto){
+        System.out.println(dateAndCountryDto);
+        return "listFreeHotel";
+    }
+
+    @GetMapping("/freeHotel")
+    public String showHotesll(DateAndCountryDto dateAndCountryDto){
+        System.out.println(dateAndCountryDto);
+        return "listFreeHotel";
+    }
+
+
     @ModelAttribute("countryList")
     public List<CountryDto> getVisaList() {
         List<CountryDto> countryDtos = new ArrayList<>();

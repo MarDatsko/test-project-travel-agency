@@ -6,11 +6,23 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
-<script >
-    function goToPage()
-    {
-        var url = document.getElementById('nameId');
-        document.location.href = '/freeHotel/' + url.value;
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+    $( function() {
+        $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
+        $( "#datepicker1" ).datepicker({ dateFormat: 'yy-mm-dd' });
+    } );
+</script>
+
+<script type="text/javascript">
+    function get_action() {
+        var name = document.getElementById('nameId');
+        var url = '/freeHotel/' + name.value;
+        return url;
     }
 </script>
 
@@ -21,7 +33,7 @@
 <body>
 <div>
     <h2>Travel Agency "Sun"</h2>
-    <form:form action="/freeHotel" method="post" modelAttribute="dateAndCountryDto">
+    <form:form action="" method="post" modelAttribute="dateAndCountryDto" onsubmit="this.action=get_action();">
 
             <p>We work with such countries, you can see the list of these countries --->
                 <a href="/countries">here</a>
@@ -37,14 +49,20 @@
                 </td>
             </tr>
 
+        <td>
+            <form:label path="firstDate">Start Date</form:label>
+            <form:input path="firstDate" id="datepicker"  name="startDate" type="text"/>
+        </td>
 
-        <label>Start Booking:</label>
-        <td><form:input path="firstDate" type="date"/></td>
-        <label>End Booking:</label>
-        <td><form:input path="secondDate" type="date"/></td>
+        <td>
+            <form:label path="secondDate">End Date</form:label>
+            <form:input path="secondDate" id="datepicker1" name="endDate" type="text"/>
+        </td>
 
-        <a href="javascript: goToPage();">Find</a>
+        <input type="submit" value="Save"></td>
+
     </form:form>
 </div>
 </body>
+
 </html>
