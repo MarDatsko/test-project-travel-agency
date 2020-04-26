@@ -13,10 +13,6 @@ public class RoomDtoMapper extends AbstractConverter<Room, RoomDto> {
         RoomDto roomDto = new RoomDto();
         roomDto.setId(room.getId());
         roomDto.setName(room.getName());
-        roomDto.setFree(room.isFree());
-        roomDto.setStartBooking(room.getStartBooking());
-        roomDto.setEndBooking(room.getEndBooking());
-
         return roomDto;
     }
 }

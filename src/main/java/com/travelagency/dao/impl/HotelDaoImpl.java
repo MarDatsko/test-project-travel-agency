@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -42,9 +43,9 @@ public class HotelDaoImpl implements HotelDao {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         List<Hotel> listHotels = entityManager
-            .createNativeQuery("SELECT * FROM tb_hotels WHERE country_id = :id", Hotel.class)
-            .setParameter("id", id)
-            .getResultList();
+                .createNativeQuery("SELECT * FROM tb_hotels WHERE country_id = :id", Hotel.class)
+                .setParameter("id", id)
+                .getResultList();
         entityManager.getTransaction().commit();
         entityManager.close();
         return listHotels;
@@ -69,5 +70,28 @@ public class HotelDaoImpl implements HotelDao {
         entityManager.getTransaction().commit();
         entityManager.close();
         return hotel;
+    }
+
+    @Override
+    public List<Hotel> getAllFreeHotelOnCertainPeriod(Long id, LocalDate firstDate, LocalDate secondDate) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        List<Hotel> listHotels = entityManager
+                .createNativeQuery(" SELECT DISTINCT travel.tb_hotels.id, travel.tb_hotels.hotel_name," +
+                        " travel.tb_hotels.country_id FROM travel.tb_hotels " +
+                        " LEFT JOIN travel.tb_rooms ON travel.tb_hotels.id = travel.tb_rooms.hotel_id " +
+                        " LEFT JOIN travel.tb_orders ON travel.tb_rooms.id = travel.tb_orders.room_id " +
+                        " WHERE travel.tb_hotels.country_id = :countryId AND " +
+                        " ((NOT ((:firstDate BETWEEN endBooking AND startBooking) " +
+                        " OR (:secondDate BETWEEN endBooking AND startBooking) " +
+                        " OR (:firstDate > startBooking AND :secondDate < endBooking))) " +
+                        " OR (endBooking IS NULL AND startBooking IS NULL )) ", Hotel.class)
+                .setParameter("countryId", id)
+                .setParameter("firstDate", firstDate)
+                .setParameter("secondDate", secondDate)
+                .getResultList();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return listHotels;
     }
 }

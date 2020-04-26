@@ -6,9 +6,10 @@ import com.travelagency.exceptions.ResourceNotFoundException;
 import com.travelagency.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Transactional
 @Service
@@ -32,7 +33,7 @@ public class HotelServiceImpl implements HotelService {
         if (allHotel == null || allHotel.isEmpty()) {
             throw new ResourceNotFoundException("Didn't find any hotels");
         }
-        return hotelDao.getAllHotel();
+        return allHotel;
     }
 
     @Override
@@ -41,7 +42,7 @@ public class HotelServiceImpl implements HotelService {
         if (allHotel == null || allHotel.isEmpty()) {
             throw new ResourceNotFoundException("Didn't find any hotels");
         }
-        return hotelDao.getAllHotelsByCountryId(id);
+        return allHotel;
     }
 
     @Override
@@ -53,5 +54,14 @@ public class HotelServiceImpl implements HotelService {
     public Hotel createHotel(Hotel hotel) {
         hotelDao.createHotel(hotel);
         return hotel;
+    }
+
+    @Override
+    public List<Hotel> getAllFreeHotelOnCertainPeriod(Long id, LocalDate firstDate, LocalDate secondDate) {
+        List<Hotel> allHotel = hotelDao.getAllFreeHotelOnCertainPeriod(id, firstDate, secondDate);
+        if (allHotel == null || allHotel.isEmpty()) {
+            throw new ResourceNotFoundException("Didn't find any hotels");
+        }
+        return allHotel;
     }
 }

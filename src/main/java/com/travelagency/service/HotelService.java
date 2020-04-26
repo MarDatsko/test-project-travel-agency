@@ -1,17 +1,21 @@
 package com.travelagency.service;
 
 import com.travelagency.entity.Hotel;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public interface HotelService {
 
-  Hotel getHotelById(Long id);
+    Hotel getHotelById(Long id);
 
-  List<Hotel> getAllHotel();
+    List<Hotel> getAllHotel();
 
-  List<Hotel> getAllHotelsByCountryId(Long id);
+    List<Hotel> getAllHotelsByCountryId(Long id);
 
-  void deleteHotelById(Long id);
+    void deleteHotelById(Long id);
 
-  Hotel createHotel(Hotel hotel);
+    Hotel createHotel(Hotel hotel);
+
+    List<Hotel> getAllFreeHotelOnCertainPeriod(Long id, LocalDate firstDate, LocalDate secondDate);
 }

@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,9 +22,6 @@ public class Room {
     @JoinColumn
     private Hotel hotel;
 
-    private boolean isFree;
-
-    private Date startBooking;
-
-    private Date endBooking;
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Order> orderList;
 }

@@ -6,16 +6,17 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
-<script>
-    $( function() {
-        $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
-        $( "#datepicker1" ).datepicker({ dateFormat: 'yy-mm-dd' });
-    } );
+<script type="text/javascript">
+    $(function() {
+        $("#datepicker").datepicker({dateFormat: "yy-mm-dd" }).val()
+    });
+    $(function() {
+        $("#datepicker1").datepicker({ dateFormat: "yy-mm-dd" }).val()
+    });
 </script>
 
 <script type="text/javascript">
@@ -42,21 +43,21 @@
             <tr>
                 <td><form:label path = "name" >Country</form:label></td>
                 <td>
-                    <form:select path="name" id="nameId">
+                    <form:select path="id" id="nameId">
                         <form:option value="NONE" label="--- Select ---" />
-                        <form:options items="${countryList}" itemValue="name" itemLabel="name" />
+                        <form:options items="${countryList}" itemValue="id" itemLabel="name" />
                     </form:select>
                 </td>
             </tr>
 
         <td>
             <form:label path="firstDate">Start Date</form:label>
-            <form:input path="firstDate" id="datepicker"  name="startDate" type="text"/>
+            <form:input path="firstDate" id="datepicker"  name="startDate" type="text" autocomplete="off"/>
         </td>
 
         <td>
             <form:label path="secondDate">End Date</form:label>
-            <form:input path="secondDate" id="datepicker1" name="endDate" type="text"/>
+            <form:input path="secondDate" id="datepicker1" name="endDate" type="text" autocomplete="off"/>
         </td>
 
         <input type="submit" value="Save"></td>

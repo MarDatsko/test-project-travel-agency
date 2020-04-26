@@ -2,6 +2,7 @@ package com.travelagency.dao;
 
 import com.travelagency.entity.Hotel;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface HotelDao {
@@ -16,4 +17,5 @@ public interface HotelDao {
 
     Hotel createHotel(Hotel hotel);
 
+    List<Hotel> getAllFreeHotelOnCertainPeriod(Long id, LocalDate firstDate, LocalDate secondDate);
 }
