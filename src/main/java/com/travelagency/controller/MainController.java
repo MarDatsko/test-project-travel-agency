@@ -63,9 +63,7 @@ public class MainController {
             user.setLastName(userRegisterDto.getLastName());
             user.setEmail(userRegisterDto.getEmail());
             user.setPassword(userRegisterDto.getPassword());
-            user.setUserRole(UserRole.USER);
-            ArrayList<Visa> objects = new ArrayList<>();
-            user.setListVisas(objects);
+            user.setUserRole(UserRole.ROLE_USER);
 
             userService.createUser(user);
 
