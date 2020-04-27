@@ -1,5 +1,5 @@
 package com.travelagency.enums;
 
 public enum UserRole {
-    USER, MANAGER
+    ROLE_USER, ROLE_MANAGER
 }
