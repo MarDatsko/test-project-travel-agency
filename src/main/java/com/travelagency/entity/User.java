@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_users")
@@ -29,6 +30,13 @@ public class User {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_visa",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "visa_id"))
+    private List<Visa> listVisas;
 
     @Column(name = "user_role")
     @Enumerated(EnumType.STRING)

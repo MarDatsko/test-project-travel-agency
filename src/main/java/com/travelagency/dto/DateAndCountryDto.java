@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -17,9 +17,9 @@ public class DateAndCountryDto {
     private Long id;
     private String name;
 
-    @DateTimeFormat(pattern = "yy-mm-dd")
-    private Date firstDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate firstDate;
 
-    @DateTimeFormat(pattern = "yy-mm-dd")
-    private Date secondDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate secondDate;
 }

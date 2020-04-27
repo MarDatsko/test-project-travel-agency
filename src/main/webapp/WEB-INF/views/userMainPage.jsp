@@ -12,10 +12,8 @@
 
 <script type="text/javascript">
     $(function() {
-        $("#datepicker").datepicker({dateFormat: "yy-mm-dd" }).val()
-    });
-    $(function() {
-        $("#datepicker1").datepicker({ dateFormat: "yy-mm-dd" }).val()
+        $("#startdate").datepicker({ dateFormat: "yy-mm-dd" });
+        $("#enddate").datepicker({ dateFormat: "yy-mm-dd" });
     });
 </script>
 
@@ -32,10 +30,9 @@
     <title>"Sun"</title>
 </head>
 <body>
-<div>
-    <h2>Travel Agency "Sun"</h2>
-    <form:form action="" method="post" modelAttribute="dateAndCountryDto" onsubmit="this.action=get_action();">
-
+    <div>
+        <h2>Travel Agency "Sun"</h2>
+        <form:form action="" method="post" modelAttribute="dateAndCountryDto" onsubmit="this.action=get_action();">
             <p>We work with such countries, you can see the list of these countries --->
                 <a href="/countries">here</a>
             </p>
@@ -49,21 +46,17 @@
                     </form:select>
                 </td>
             </tr>
-
-        <td>
-            <form:label path="firstDate">Start Date</form:label>
-            <form:input path="firstDate" id="datepicker"  name="startDate" type="text" autocomplete="off"/>
-        </td>
-
-        <td>
-            <form:label path="secondDate">End Date</form:label>
-            <form:input path="secondDate" id="datepicker1" name="endDate" type="text" autocomplete="off"/>
-        </td>
-
-        <input type="submit" value="Save"></td>
-
-    </form:form>
-</div>
+            <td>
+                <form:label path="firstDate">Start Date</form:label>
+                <form:input path="firstDate" id="startdate"  name="startDate" type="text" autocomplete="off"/>
+            </td>
+            <td>
+                <form:label path="secondDate">End Date</form:label>
+                <form:input path="secondDate" id="enddate" name="endDate" type="text" autocomplete="off"/>
+            </td>
+            <input type="submit" value="Save"></td>
+            <a href="/statistic">Statistics </a>
+        </form:form>
+    </div>
 </body>
-
 </html>

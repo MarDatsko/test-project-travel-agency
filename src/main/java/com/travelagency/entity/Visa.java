@@ -18,6 +18,9 @@ public class Visa {
     @Column(name = "visa_name")
     private String name;
 
+    @ManyToMany(mappedBy = "listVisas")
+    private List<User> userList;
+
     @OneToMany(mappedBy = "visa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Country> countries;
 }

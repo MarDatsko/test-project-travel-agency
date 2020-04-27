@@ -1,10 +1,7 @@
 package com.travelagency.controller;
 
 import com.travelagency.dto.*;
-import com.travelagency.entity.Hotel;
-import com.travelagency.entity.Order;
-import com.travelagency.entity.Room;
-import com.travelagency.entity.User;
+import com.travelagency.entity.*;
 import com.travelagency.enums.UserRole;
 import com.travelagency.exceptions.ResourceNotFoundException;
 import com.travelagency.service.*;
@@ -20,8 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +64,8 @@ public class MainController {
             user.setEmail(userRegisterDto.getEmail());
             user.setPassword(userRegisterDto.getPassword());
             user.setUserRole(UserRole.USER);
+            ArrayList<Visa> objects = new ArrayList<>();
+            user.setListVisas(objects);
 
             userService.createUser(user);
 
@@ -99,19 +96,10 @@ public class MainController {
 
         CountryDto country = modelMapper.map(countryService.getCountryById(id), CountryDto.class);
 
-        System.out.println(dateAndCountryDto.getSecondDate());
-        System.out.println(dateAndCountryDto.getFirstDate());
-
-        LocalDate localDate = dateAndCountryDto.getFirstDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate localDate1 = dateAndCountryDto.getSecondDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        System.out.println(localDate);
-        System.out.println(localDate1);
-
-
         List<Hotel> allHotelsByCountryId = hotelService.getAllHotelsByCountryId(id);
         allHotelsByCountryId.forEach(hotel -> listHotels.add(modelMapper.map(hotel, HotelDto.class)));
 
-        List<Hotel> allFreeHotelOnCertainPeriod = hotelService.getAllFreeHotelOnCertainPeriod(id, localDate, localDate1);
+        List<Hotel> allFreeHotelOnCertainPeriod = hotelService.getAllFreeHotelOnCertainPeriod(id, dateAndCountryDto.getFirstDate(), dateAndCountryDto.getSecondDate());
         allFreeHotelOnCertainPeriod.forEach(hotel -> list.add(modelMapper.map(hotel, HotelDto.class)));
 
         listHotels.removeAll(list);
