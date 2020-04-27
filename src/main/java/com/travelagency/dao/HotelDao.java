@@ -18,4 +18,8 @@ public interface HotelDao {
     Hotel createHotel(Hotel hotel);
 
     List<Hotel> getAllFreeHotelOnCertainPeriod(Long id, LocalDate firstDate, LocalDate secondDate);
+
+    Long getCountHotelClients(Long hotelId);
+
+    Long getAverageReserveTime(Long hotelId);
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.util.List;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -55,5 +56,40 @@ public class UserDaoImpl implements UserDao {
                 .setParameter("id", id);
         entityManager.getTransaction().commit();
         entityManager.close();
+    }
+
+    @Override
+    public List<String> getListCountriesWhereWasUser(Long userId) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        List<String> listCountries = entityManager
+                .createNativeQuery(" SELECT DISTINCT country_name FROM travel.tb_countries " +
+                        " LEFT JOIN travel.tb_hotels ON travel.tb_countries.id = travel.tb_hotels.country_id " +
+                        " LEFT JOIN travel.tb_rooms ON travel.tb_hotels.id = travel.tb_rooms.hotel_id " +
+                        " LEFT JOIN travel.tb_orders ON travel.tb_rooms.id = travel.tb_orders.room_id " +
+                        " WHERE user_id = :userId ", String.class)
+                .setParameter("userId", userId)
+                .getResultList();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return listCountries;
+    }
+
+    @Override
+    public List<String> getListVisasWhichHasUser(Long userId) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        List<String> listVisas = entityManager
+                .createNativeQuery(" SELECT DISTINCT visa_name FROM travel.tb_countries " +
+                        " LEFT JOIN travel.tb_hotels ON travel.tb_countries.id = travel.tb_hotels.country_id " +
+                        " LEFT JOIN travel.tb_rooms ON travel.tb_hotels.id = travel.tb_rooms.hotel_id " +
+                        " LEFT JOIN travel.tb_orders ON travel.tb_rooms.id = travel.tb_orders.room_id " +
+                        " LEFT JOIN travel.tb_visas ON travel.tb_countries.visa_id = travel.tb_visas.id " +
+                        " WHERE user_id = :userId ", String.class)
+                .setParameter("userId", userId)
+                .getResultList();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return listVisas;
     }
 }

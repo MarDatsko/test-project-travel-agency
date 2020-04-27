@@ -2,6 +2,7 @@ package com.travelagency.service;
 
 import com.travelagency.entity.Room;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface RoomService {
@@ -15,4 +16,6 @@ public interface RoomService {
     Room createRoom(Room room);
 
     List<Room> getAllRoomsByHotelId(Long id);
+
+    Long getRoomOccupancy(Long roomId, LocalDate firstDate, LocalDate secondDate);
 }

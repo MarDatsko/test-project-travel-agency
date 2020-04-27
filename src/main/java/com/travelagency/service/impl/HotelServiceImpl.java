@@ -64,4 +64,22 @@ public class HotelServiceImpl implements HotelService {
         }
         return allHotel;
     }
+
+    @Override
+    public Long getCountHotelClient(Long hotelId) {
+        Long countHotelClients = hotelDao.getCountHotelClients(hotelId);
+        if (countHotelClients == null) {
+            throw new ResourceNotFoundException("Hotel didn't have any clients");
+        }
+        return countHotelClients;
+    }
+
+    @Override
+    public Long getAverageReserveTime(Long hotelId) {
+        Long averageTime = hotelDao.getAverageReserveTime(hotelId);
+        if (averageTime == null) {
+            throw new ResourceNotFoundException("Hotel didn't have reserved rooms");
+        }
+        return averageTime;
+    }
 }

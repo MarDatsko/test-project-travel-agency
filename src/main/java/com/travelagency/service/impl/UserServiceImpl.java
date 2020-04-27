@@ -7,6 +7,8 @@ import com.travelagency.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -39,5 +41,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(Long id) {
         userDao.deleteUserById(id);
+    }
+
+    @Override
+    public List<String> getListCountriesWhereWasUser(Long userId) {
+        List<String> listCountries = userDao.getListCountriesWhereWasUser(userId);
+        if (listCountries == null || listCountries.isEmpty()) {
+            throw new ResourceNotFoundException("Didn't find any countries");
+        }
+        return listCountries;
+    }
+
+    @Override
+    public List<String> getListVisasWhichHasUser(Long userId) {
+        List<String> listVisas = userDao.getListVisasWhichHasUser(userId);
+        if (listVisas == null || listVisas.isEmpty()) {
+            throw new ResourceNotFoundException("Didn't find any visas");
+        }
+        return listVisas;
     }
 }

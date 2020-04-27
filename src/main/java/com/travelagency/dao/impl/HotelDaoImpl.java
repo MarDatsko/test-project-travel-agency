@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -93,5 +94,40 @@ public class HotelDaoImpl implements HotelDao {
         entityManager.getTransaction().commit();
         entityManager.close();
         return listHotels;
+    }
+
+    @Override
+    public Long getCountHotelClients(Long hotelId) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        Query query = entityManager
+                .createNativeQuery(" SELECT COUNT(DISTINCT user_id) FROM travel.tb_countries " +
+                        " LEFT JOIN travel.tb_hotels ON travel.tb_countries.id = travel.tb_hotels.country_id " +
+                        " LEFT JOIN travel.tb_rooms ON travel.tb_hotels.id = travel.tb_rooms.hotel_id " +
+                        " LEFT JOIN travel.tb_orders ON travel.tb_rooms.id = travel.tb_orders.room_id " +
+                        " LEFT JOIN travel.tb_visas ON travel.tb_countries.visa_id = travel.tb_visas.id " +
+                        " WHERE hotel_id = :hotelId ", Long.class)
+                .setParameter("hotelId", hotelId);
+        Long countClients = (Long) query.getSingleResult();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return countClients;
+    }
+
+    @Override
+    public Long getAverageReserveTime(Long hotelId) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        Query query = entityManager
+                .createNativeQuery(" SELECT (SUM(CAST(endBooking AS DATE))-SUM(CAST(startBooking AS DATE)))/COUNT(startBooking) FROM travel.tb_countries " +
+                        " LEFT JOIN travel.tb_hotels ON travel.tb_countries.id = travel.tb_hotels.country_id " +
+                        " LEFT JOIN travel.tb_rooms ON travel.tb_hotels.id = travel.tb_rooms.hotel_id " +
+                        " LEFT JOIN travel.tb_orders ON travel.tb_rooms.id = travel.tb_orders.room_id " +
+                        " WHERE hotel_id = :hotelId ", Long.class)
+                .setParameter("hotelId", hotelId);
+        Long averageTime = (Long) query.getSingleResult();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return averageTime;
     }
 }

@@ -18,4 +18,8 @@ public interface HotelService {
     Hotel createHotel(Hotel hotel);
 
     List<Hotel> getAllFreeHotelOnCertainPeriod(Long id, LocalDate firstDate, LocalDate secondDate);
+
+    Long getCountHotelClient(Long hotelId);
+
+    Long getAverageReserveTime(Long hotelId);
 }

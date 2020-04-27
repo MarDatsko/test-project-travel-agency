@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -69,5 +71,25 @@ public class RoomDaoImpl implements RoomDao {
         entityManager.getTransaction().commit();
         entityManager.close();
         return listRooms;
+    }
+
+    @Override
+    public Long getRoomOccupancy(Long roomId, LocalDate firstDate, LocalDate secondDate) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        Query query = entityManager
+                .createNativeQuery(" SELECT SUM(CAST(endBooking AS DATE))-SUM(CAST(startBooking AS DATE)) FROM travel.tb_countries " +
+                        " LEFT JOIN travel.tb_hotels ON travel.tb_countries.id = travel.tb_hotels.country_id " +
+                        " LEFT JOIN travel.tb_rooms ON travel.tb_hotels.id = travel.tb_rooms.hotel_id " +
+                        " LEFT JOIN travel.tb_orders ON travel.tb_rooms.id = travel.tb_orders.room_id " +
+                        " WHERE room_id = :roomId AND (CAST(:firstDate AS DATE) < CAST(startBooking AS DATE) " +
+                        " AND CAST(:secondDate AS DATE) > CAST(endBooking AS DATE)) ", Long.class)
+                .setParameter("roomId", roomId)
+                .setParameter("firstDate", firstDate)
+                .setParameter("secondDate", secondDate);
+        Long roomOccupancy = (Long) query.getSingleResult();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return roomOccupancy;
     }
 }

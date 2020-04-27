@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Transactional
@@ -53,5 +54,14 @@ public class RoomServiceImpl implements RoomService {
             throw new ResourceNotFoundException("Didn't found any rooms");
         }
         return allRooms;
+    }
+
+    @Override
+    public Long getRoomOccupancy(Long roomId, LocalDate firstDate, LocalDate secondDate) {
+        Long roomOccupancy = roomDao.getRoomOccupancy(roomId, firstDate, secondDate);
+        if (roomOccupancy == null) {
+            throw new ResourceNotFoundException("Hotel didn't have reserved rooms in this time");
+        }
+        return roomOccupancy;
     }
 }
