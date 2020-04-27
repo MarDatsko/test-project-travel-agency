@@ -13,4 +13,6 @@ public interface RoomDao {
     void deleteRoomById(Long id);
 
     Room createRoom(Room room);
+
+    List<Room> getAllRoomsByHotelId(Long id);
 }

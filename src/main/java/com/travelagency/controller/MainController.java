@@ -1,22 +1,20 @@
 package com.travelagency.controller;
 
-import com.travelagency.dto.CountryDto;
-import com.travelagency.dto.DateAndCountryDto;
-import com.travelagency.dto.HotelDto;
-import com.travelagency.dto.UserRegisterDto;
+import com.travelagency.dto.*;
+import com.travelagency.entity.Hotel;
+import com.travelagency.entity.Order;
+import com.travelagency.entity.Room;
 import com.travelagency.entity.User;
 import com.travelagency.enums.UserRole;
 import com.travelagency.exceptions.ResourceNotFoundException;
-import com.travelagency.service.CountryService;
-import com.travelagency.service.HotelService;
-import com.travelagency.service.UserService;
+import com.travelagency.service.*;
 import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,7 +38,13 @@ public class MainController {
     private CountryService countryService;
 
     @Autowired
+    private RoomService roomService;
+
+    @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/")
     public String printLogo() {
@@ -79,6 +83,10 @@ public class MainController {
     @GetMapping("/mainPage")
     public String sendUser(Model model, HttpSession session) {
         DateAndCountryDto dateAndCountryDto = new DateAndCountryDto();
+        List<CountryDto> countryDtos = new ArrayList<>();
+        countryService.getAllCountries().forEach(country -> countryDtos.add(
+                modelMapper.map(country, CountryDto.class)));
+        model.addAttribute("countryList", countryDtos);
         model.addAttribute("dateAndCountryDto", dateAndCountryDto);
         return "userMainPage";
     }
@@ -87,6 +95,8 @@ public class MainController {
     @PostMapping("/freeHotel/{id}")
     public ModelAndView showFreeHotels(@PathVariable(name = "id") Long id, DateAndCountryDto dateAndCountryDto) {
         List<HotelDto> listHotels = new ArrayList<>();
+        List<HotelDto> list = new ArrayList<>();
+
         CountryDto country = modelMapper.map(countryService.getCountryById(id), CountryDto.class);
 
         System.out.println(dateAndCountryDto.getSecondDate());
@@ -98,11 +108,13 @@ public class MainController {
         System.out.println(localDate1);
 
 
-        hotelService.getAllFreeHotelOnCertainPeriod(id, localDate, localDate1)
-                .forEach(hotel -> listHotels.add(modelMapper.map(hotel, HotelDto.class)));
+        List<Hotel> allHotelsByCountryId = hotelService.getAllHotelsByCountryId(id);
+        allHotelsByCountryId.forEach(hotel -> listHotels.add(modelMapper.map(hotel, HotelDto.class)));
 
-        listHotels.forEach(System.out::println);
+        List<Hotel> allFreeHotelOnCertainPeriod = hotelService.getAllFreeHotelOnCertainPeriod(id, localDate, localDate1);
+        allFreeHotelOnCertainPeriod.forEach(hotel -> list.add(modelMapper.map(hotel, HotelDto.class)));
 
+        listHotels.removeAll(list);
 
         ModelAndView mav = new ModelAndView("country_info");
         mav.addObject("listHotels", listHotels);
@@ -110,12 +122,32 @@ public class MainController {
         return mav;
     }
 
-    @ModelAttribute("countryList")
-    public List<CountryDto> getVisaList() {
-        List<CountryDto> countryDtos = new ArrayList<>();
-        countryService.getAllCountries().forEach(country -> countryDtos.add(
-                modelMapper.map(country, CountryDto.class)));
-        return countryDtos;
+    @GetMapping("/reserveRoom/{id}")
+    public String reserveRoom(@PathVariable(name = "id") Long id, Model model) {
+        ReserveRoom reserveRoom = new ReserveRoom();
+        List<RoomDto> roomList = new ArrayList<>();
+        roomService.getAllRoomsByHotelId(id).forEach(room -> roomList.add(
+                modelMapper.map(room, RoomDto.class)));
+        model.addAttribute("roomList", roomList);
+        model.addAttribute("hotel", "hotel");
+        model.addAttribute("reserveRoom", reserveRoom);
+        return "reserveRoom";
     }
 
+    @PostMapping("/reserveRoom/{id}")
+    public String reserveRoomSave(@PathVariable(name = "id") Long id, ReserveRoom reserveRoom, Authentication authentication) {
+
+        User userByEmail = userService.getUserByEmail(authentication.getName());
+        Order order = new Order();
+        order.setStartBooking(reserveRoom.getFirstDate());
+        order.setEndBooking(reserveRoom.getSecondDate());
+        Room room = new Room();
+        room.setId(id);
+        order.setRoom(room);
+        order.setUser(userByEmail);
+
+        orderService.createOrder(order);
+
+        return "index";
+    }
 }

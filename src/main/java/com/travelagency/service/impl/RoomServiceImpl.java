@@ -5,10 +5,10 @@ import com.travelagency.entity.Room;
 import com.travelagency.exceptions.ResourceNotFoundException;
 import com.travelagency.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional
 @Service
@@ -44,5 +44,14 @@ public class RoomServiceImpl implements RoomService {
     public Room createRoom(Room room) {
         roomDao.createRoom(room);
         return room;
+    }
+
+    @Override
+    public List<Room> getAllRoomsByHotelId(Long id) {
+        List<Room> allRooms = roomDao.getAllRoomsByHotelId(id);
+        if (allRooms == null || allRooms.isEmpty()) {
+            throw new ResourceNotFoundException("Didn't found any rooms");
+        }
+        return allRooms;
     }
 }

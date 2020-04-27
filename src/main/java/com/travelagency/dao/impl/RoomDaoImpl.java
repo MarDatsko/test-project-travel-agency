@@ -57,4 +57,17 @@ public class RoomDaoImpl implements RoomDao {
         entityManager.close();
         return room;
     }
+
+    @Override
+    public List<Room> getAllRoomsByHotelId(Long id) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        List<Room> listRooms = entityManager
+                .createNativeQuery("SELECT * FROM tb_rooms WHERE hotel_id = :id", Room.class)
+                .setParameter("id", id)
+                .getResultList();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return listRooms;
+    }
 }

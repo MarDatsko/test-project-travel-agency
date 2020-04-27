@@ -19,7 +19,8 @@ Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
         <c:forEach var="hotel" items="${listHotels}" >
             <tr>
                 <td>${hotel.id}</td>
-                <td>${hotel.name}</td>
+                <td><a href="/reserveRoom/${hotel.id}">${hotel.name}</a></td>
+
 
                 <td>
                     <a href="/edit?id=${country.id}">Edit</a>

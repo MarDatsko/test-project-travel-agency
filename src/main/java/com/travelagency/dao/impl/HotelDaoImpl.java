@@ -82,10 +82,10 @@ public class HotelDaoImpl implements HotelDao {
                         " LEFT JOIN travel.tb_rooms ON travel.tb_hotels.id = travel.tb_rooms.hotel_id " +
                         " LEFT JOIN travel.tb_orders ON travel.tb_rooms.id = travel.tb_orders.room_id " +
                         " WHERE travel.tb_hotels.country_id = :countryId AND " +
-                        " ((NOT ((:firstDate BETWEEN endBooking AND startBooking) " +
-                        " OR (:secondDate BETWEEN endBooking AND startBooking) " +
-                        " OR (:firstDate > startBooking AND :secondDate < endBooking))) " +
-                        " OR (endBooking IS NULL AND startBooking IS NULL )) ", Hotel.class)
+                        " (((CAST(:firstDate AS DATE) BETWEEN CAST(endBooking AS DATE) AND CAST(startBooking AS DATE)) " +
+                        " OR (CAST(:secondDate AS DATE) BETWEEN CAST(endBooking AS DATE) AND CAST(startBooking AS DATE)) " +
+                        " OR (CAST(:firstDate AS DATE) >= CAST(startBooking AS DATE) " +
+                        " AND CAST(:secondDate AS DATE) <= CAST(endBooking AS DATE))));", Hotel.class)
                 .setParameter("countryId", id)
                 .setParameter("firstDate", firstDate)
                 .setParameter("secondDate", secondDate)
