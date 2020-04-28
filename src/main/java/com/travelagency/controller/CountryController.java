@@ -74,7 +74,7 @@ public class CountryController {
     }
 
     @RequestMapping("/delete")
-    public String deleteCustomerForm(@RequestParam Long id) {
+    public String deleteCountryForm(@RequestParam Long id) {
         countryService.deleteCountryById(id);
         return "redirect:/countries";
     }

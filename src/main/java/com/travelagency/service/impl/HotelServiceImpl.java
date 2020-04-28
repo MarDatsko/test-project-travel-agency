@@ -57,6 +57,12 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
+    public Hotel updateHotel(Hotel hotel) {
+        hotelDao.updateHotel(hotel);
+        return hotel;
+    }
+
+    @Override
     public List<Hotel> getAllFreeHotelOnCertainPeriod(Long id, LocalDate firstDate, LocalDate secondDate) {
         List<Hotel> allHotel = hotelDao.getAllFreeHotelOnCertainPeriod(id, firstDate, secondDate);
         if (allHotel == null || allHotel.isEmpty()) {

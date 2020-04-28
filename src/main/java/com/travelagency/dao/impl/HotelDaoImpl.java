@@ -1,6 +1,7 @@
 package com.travelagency.dao.impl;
 
 import com.travelagency.dao.HotelDao;
+import com.travelagency.entity.Country;
 import com.travelagency.entity.Hotel;
 import java.math.BigInteger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +59,8 @@ public class HotelDaoImpl implements HotelDao {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         entityManager
-                .createNativeQuery("DELETE FROM tb_hotels WHERE id= :id", Hotel.class)
-                .setParameter("id", id);
+                .createNativeQuery("DELETE FROM tb_hotels WHERE id= :id")
+                .setParameter("id", id).executeUpdate();
         entityManager.getTransaction().commit();
         entityManager.close();
     }
@@ -68,7 +69,28 @@ public class HotelDaoImpl implements HotelDao {
     public Hotel createHotel(Hotel hotel) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        entityManager.persist(hotel);
+        entityManager.createNativeQuery(
+                "INSERT INTO tb_hotels (hotel_name, country_id) VALUES (:name, :country_id)",
+                Hotel.class)
+                .setParameter("name", hotel.getName())
+                .setParameter("country_id", hotel.getCountry().getId())
+                .executeUpdate();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return hotel;
+    }
+
+    @Override
+    public Hotel updateHotel(Hotel hotel) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        entityManager.createNativeQuery(
+                "UPDATE tb_hotels SET hotel_name = :name WHERE id = :id",
+                Hotel.class)
+                .setParameter("id", hotel.getId())
+                .setParameter("name", hotel.getName())
+                .executeUpdate();
+
         entityManager.getTransaction().commit();
         entityManager.close();
         return hotel;

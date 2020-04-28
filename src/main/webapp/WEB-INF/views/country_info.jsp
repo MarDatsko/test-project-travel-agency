@@ -11,6 +11,9 @@ Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <body>
 <div align="center">
     <h2>Country  - ${country.name}</h2>
+    <sec:authorize access="hasRole('ROLE_MANAGER')">
+        <h3><a href="/new_hotel/country/${country.id}">New Hotel</a></h3>
+    </sec:authorize>
     <table border="1" cellpadding="5">
         <tr>
             <th>ID</th>
@@ -25,11 +28,11 @@ Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
                 <td><a href="/reserveRoom/${hotel.id}">${hotel.name}</a></td>
                 <sec:authorize access="hasRole('ROLE_MANAGER')">
                 <td>
-                    <a href="/edit?id=${country.id}">Edit</a>
+                    <a href="/editHotel/${hotel.id}/country/${country.id}">Edit</a>
                     &nbsp;&nbsp;&nbsp;
-                    <a href="/delete?id=${country.id}">Delete</a>
-
-                    <a href="/hotelStatistic/${country.id}">Statistic</a>
+                    <a href="/deleteHotel/${hotel.id}/${country.id}">Delete</a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="/hotelStatistic/${hotel.id}">Statistic</a>
                 </td>
                 </sec:authorize>
             </tr>
