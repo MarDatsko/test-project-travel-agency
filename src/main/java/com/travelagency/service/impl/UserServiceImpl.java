@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmail(String email) {
         User userByEmail = userDao.getUserByEmail(email);
         if (userByEmail == null) {
-            throw new ResourceNotFoundException(email);
+        //    throw new ResourceNotFoundException(email);
         }
         return userByEmail;
     }

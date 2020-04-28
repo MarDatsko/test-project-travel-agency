@@ -2,11 +2,13 @@ package com.travelagency.dao.impl;
 
 import com.travelagency.dao.UserDao;
 import com.travelagency.entity.User;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 @Repository
@@ -25,6 +27,7 @@ public class UserDaoImpl implements UserDao {
         return user;
     }
 
+    @SneakyThrows
     @Override
     public User createUser(User user) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -39,9 +42,14 @@ public class UserDaoImpl implements UserDao {
     public User getUserByEmail(String email) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        User user = (User) entityManager
-                .createNativeQuery("SELECT * FROM tb_users WHERE email= :email", User.class)
-                .setParameter("email", email).getSingleResult();
+        User user = null;
+        try {
+             user = (User) entityManager
+                    .createNativeQuery("SELECT * FROM tb_users WHERE email= :email", User.class)
+                    .setParameter("email", email).getSingleResult();
+        }catch (NoResultException e){
+            e.printStackTrace();
+        }
         entityManager.getTransaction().commit();
         entityManager.close();
         return user;

@@ -1,9 +1,11 @@
 package com.travelagency.controller;
 
 import com.travelagency.dto.*;
-import com.travelagency.entity.*;
+import com.travelagency.entity.Hotel;
+import com.travelagency.entity.Order;
+import com.travelagency.entity.Room;
+import com.travelagency.entity.User;
 import com.travelagency.enums.UserRole;
-import com.travelagency.exceptions.ResourceNotFoundException;
 import com.travelagency.service.*;
 import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
@@ -53,12 +55,10 @@ public class MainController {
 
     @PostMapping("/register")
     public String registerUser(UserRegisterDto userRegisterDto, Model model) {
-
-        try {
-            userService.getUserByEmail(userRegisterDto.getEmail());
-        } catch (ResourceNotFoundException e) {
+        User userByEmail = userService.getUserByEmail(userRegisterDto.getEmail());
+        if (userByEmail == null) {
             User user = new User();
-
+            System.out.println("=================================");
             user.setFirstName(userRegisterDto.getFirstName());
             user.setLastName(userRegisterDto.getLastName());
             user.setEmail(userRegisterDto.getEmail());

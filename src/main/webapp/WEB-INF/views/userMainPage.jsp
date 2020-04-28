@@ -54,9 +54,10 @@
                 <form:label path="secondDate">End Date</form:label>
                 <form:input path="secondDate" id="enddate" name="endDate" type="text" autocomplete="off"/>
             </td>
-            <input type="submit" value="Save"></td>
-            <a href="/statistic">Statistics </a>
+            <input type="submit" value="Save"></td
         </form:form>
+
+        <div><a href="/userStatistic">Statistics </a></div>
     </div>
 </body>
 </html>
