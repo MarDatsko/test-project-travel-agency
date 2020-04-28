@@ -83,11 +83,13 @@ public class RoomDaoImpl implements RoomDao {
                         " LEFT JOIN travel.tb_rooms ON travel.tb_hotels.id = travel.tb_rooms.hotel_id " +
                         " LEFT JOIN travel.tb_orders ON travel.tb_rooms.id = travel.tb_orders.room_id " +
                         " WHERE room_id = :roomId AND (CAST(:firstDate AS DATE) < CAST(startBooking AS DATE) " +
-                        " AND CAST(:secondDate AS DATE) > CAST(endBooking AS DATE)) ", Long.class)
+                        " AND CAST(:secondDate AS DATE) > CAST(endBooking AS DATE)) ")
                 .setParameter("roomId", roomId)
                 .setParameter("firstDate", firstDate)
                 .setParameter("secondDate", secondDate);
-        Long roomOccupancy = (Long) query.getSingleResult();
+        String string = query.getSingleResult().toString();
+        Double temp = Double.parseDouble(string);
+        Long roomOccupancy = temp.longValue();
         entityManager.getTransaction().commit();
         entityManager.close();
         return roomOccupancy;

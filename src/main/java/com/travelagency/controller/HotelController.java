@@ -1,16 +1,16 @@
 package com.travelagency.controller;
 
 import com.travelagency.dto.CountryDto;
+import com.travelagency.dto.DateAndCountryDto;
 import com.travelagency.dto.HotelDto;
-import com.travelagency.dto.VisaDto;
 import com.travelagency.entity.Country;
 import com.travelagency.entity.Hotel;
+import com.travelagency.dto.RoomDto;
 import com.travelagency.service.CountryService;
 import com.travelagency.service.HotelService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
+import com.travelagency.service.RoomService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +29,9 @@ public class HotelController {
   @Autowired
   private ModelMapper modelMapper;
 
+  @Autowired
+  private RoomService roomService;
+
   @RequestMapping("/country")
   public ModelAndView findCountryById(@RequestParam long id){
     List<HotelDto> listHotels = new ArrayList<>();
@@ -43,11 +46,36 @@ public class HotelController {
   @GetMapping("/hotelStatistic/{id}")
   public String hotelStatistic(@PathVariable(name = "id") long id, Model model) {
     Long numberOfCustomers = hotelService.getCountHotelClient(id);
-    Long avarageReserveTime = hotelService.getAverageReserveTime(id);
+    Long averageReserveTime = hotelService.getAverageReserveTime(id);
     HotelDto hotelDto = modelMapper.map(hotelService.getHotelById(id), HotelDto.class);
+    List <RoomDto> listRooms = new ArrayList<>();
+    roomService.getAllRoomsByHotelId(id).forEach(room -> listRooms.add(modelMapper.map(room,RoomDto.class)));
+    DateAndCountryDto room = new DateAndCountryDto();
     model.addAttribute("numberOfCustomers", numberOfCustomers);
-    model.addAttribute("avarageReserveTime", avarageReserveTime);
+    model.addAttribute("averageReserveTime", averageReserveTime);
     model.addAttribute("hotel", hotelDto);
+    model.addAttribute("listRooms",listRooms);
+    model.addAttribute("room",room);
+    return "hotelStatistic";
+  }
+
+  @PostMapping("/roomStatistic/{id}")
+  public String roomStatistic (@PathVariable(name = "id") long id, Model model, DateAndCountryDto dateAndCountryDto){
+    Long roomOccupancy = roomService.getRoomOccupancy(id, dateAndCountryDto.getFirstDate(), dateAndCountryDto.getSecondDate());
+    Long numberOfCustomers = hotelService.getCountHotelClient(id);
+    Long averageReserveTime = hotelService.getAverageReserveTime(id);
+    HotelDto hotelDto = modelMapper.map(hotelService.getHotelById(id), HotelDto.class);
+    List <RoomDto> listRooms = new ArrayList<>();
+    roomService.getAllRoomsByHotelId(id).forEach(room -> listRooms.add(modelMapper.map(room,RoomDto.class)));
+    DateAndCountryDto room = new DateAndCountryDto();
+    model.addAttribute("numberOfCustomers", numberOfCustomers);
+    model.addAttribute("averageReserveTime", averageReserveTime);
+    model.addAttribute("hotel", hotelDto);
+    model.addAttribute("listRooms",listRooms);
+    model.addAttribute("room",room);
+    model.addAttribute("day","days");
+    model.addAttribute("logo","Room occupancy over a period of time");
+    model.addAttribute("statistic",roomOccupancy);
     return "hotelStatistic";
   }
 
