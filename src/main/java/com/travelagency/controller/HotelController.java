@@ -9,6 +9,9 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,5 +36,16 @@ public class HotelController {
     mav.addObject("listHotels", listHotels);
     mav.addObject("country", country);
     return mav;
+  }
+
+  @GetMapping("/hotelStatistic/{id}")
+  public String hotelStatistic(@PathVariable(name = "id") long id, Model model) {
+    Long numberOfCustomers = hotelService.getCountHotelClient(id);
+    Long avarageReserveTime = hotelService.getAverageReserveTime(id);
+    HotelDto hotelDto = modelMapper.map(hotelService.getHotelById(id), HotelDto.class);
+    model.addAttribute("numberOfCustomers", numberOfCustomers);
+    model.addAttribute("avarageReserveTime", avarageReserveTime);
+    model.addAttribute("hotel", hotelDto);
+    return "hotelStatistic";
   }
 }

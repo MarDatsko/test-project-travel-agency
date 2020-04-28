@@ -28,13 +28,14 @@ Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
                     <a href="/edit?id=${country.id}">Edit</a>
                     &nbsp;&nbsp;&nbsp;
                     <a href="/delete?id=${country.id}">Delete</a>
+
+                    <a href="/hotelStatistic/${country.id}">Statistic</a>
                 </td>
                 </sec:authorize>
             </tr>
         </c:forEach>
     </table>
-    <sec:authorize access="hasRole('ROLE_MANAGER')">
-    Total number of visas received - </sec:authorize>
+
 </div>
 </body>
 </html>

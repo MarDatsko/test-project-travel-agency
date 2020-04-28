@@ -2,6 +2,7 @@ package com.travelagency.dao.impl;
 
 import com.travelagency.dao.HotelDao;
 import com.travelagency.entity.Hotel;
+import java.math.BigInteger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -106,9 +107,10 @@ public class HotelDaoImpl implements HotelDao {
                         " LEFT JOIN travel.tb_rooms ON travel.tb_hotels.id = travel.tb_rooms.hotel_id " +
                         " LEFT JOIN travel.tb_orders ON travel.tb_rooms.id = travel.tb_orders.room_id " +
                         " LEFT JOIN travel.tb_visas ON travel.tb_countries.visa_id = travel.tb_visas.id " +
-                        " WHERE hotel_id = :hotelId ", Long.class)
+                        " WHERE hotel_id = :hotelId ")
                 .setParameter("hotelId", hotelId);
-        Long countClients = (Long) query.getSingleResult();
+        String string = query.getSingleResult().toString();
+        Long countClients = Long.parseLong(string);
         entityManager.getTransaction().commit();
         entityManager.close();
         return countClients;
@@ -123,9 +125,11 @@ public class HotelDaoImpl implements HotelDao {
                         " LEFT JOIN travel.tb_hotels ON travel.tb_countries.id = travel.tb_hotels.country_id " +
                         " LEFT JOIN travel.tb_rooms ON travel.tb_hotels.id = travel.tb_rooms.hotel_id " +
                         " LEFT JOIN travel.tb_orders ON travel.tb_rooms.id = travel.tb_orders.room_id " +
-                        " WHERE hotel_id = :hotelId ", Long.class)
+                        " WHERE hotel_id = :hotelId ")
                 .setParameter("hotelId", hotelId);
-        Long averageTime = (Long) query.getSingleResult();
+        String string = query.getSingleResult().toString();
+        Double temp = Double.parseDouble(string);
+        Long averageTime = temp.longValue();
         entityManager.getTransaction().commit();
         entityManager.close();
         return averageTime;
