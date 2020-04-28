@@ -27,7 +27,7 @@
                 <td><form:label path = "visa">Visa</form:label></td>
                 <td>
                     <form:select path="visa.id">
-                        <form:options items="${viasaList}" itemValue="id" itemLabel="name" />
+                        <form:options items="${visaList}" itemValue="id" itemLabel="name" />
                     </form:select>
                 </td>
             </tr>

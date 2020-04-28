@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -25,9 +25,9 @@ public class Order {
     @JoinColumn
     private Room room;
 
-    @DateTimeFormat(pattern = "yy-mm-dd")
-    private Date startBooking;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate startBooking;
 
-    @DateTimeFormat(pattern = "yy-mm-dd")
-    private Date endBooking;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate endBooking;
 }

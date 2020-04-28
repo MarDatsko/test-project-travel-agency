@@ -10,81 +10,80 @@ import com.travelagency.service.VisaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class CountryController {
-    @Autowired
-    private CountryService countryService;
+
+    private final CountryService countryService;
+    private final ModelMapper modelMapper;
+    private final VisaService visaService;
+    private final HotelService hotelService;
 
     @Autowired
-    private ModelMapper modelMapper;
+    public CountryController(CountryService countryService, ModelMapper modelMapper, VisaService visaService, HotelService hotelService) {
+        this.countryService = countryService;
+        this.modelMapper = modelMapper;
+        this.visaService = visaService;
+        this.hotelService = hotelService;
+    }
 
-    @Autowired
-    private VisaService visaService;
-
-    @Autowired
-    private HotelService hotelService;
-
-    @RequestMapping("/countries")
-    public ModelAndView countries() {
+    @GetMapping("/countries")
+    public String countries(Model model) {
         List<CountryDto> listCountries = new ArrayList<>();
         countryService.getAllCountries().forEach(country -> listCountries.add(
                 modelMapper.map(country, CountryDto.class)));
-        ModelAndView mav = new ModelAndView("countries");
-        mav.addObject("listCountries", listCountries);
-        return mav;
+        model.addAttribute("listCountries", listCountries);
+        return "countries";
     }
 
-    @RequestMapping("/new_country")
-    public String newCountryForm(Map<String, Object> model) {
+    @GetMapping("/new_country")
+    public String newCountryForm(Model model) {
         CountryDto country = new CountryDto();
-        model.put("country", country);
+        model.addAttribute("country", country);
         return "new_country";
     }
 
+    @GetMapping("/country")
+    public String findCountryById(@RequestParam Long id, Model model) {
+        List<HotelDto> listHotels = new ArrayList<>();
+        CountryDto country = modelMapper.map(countryService.getCountryById(id), CountryDto.class);
+        hotelService.getAllHotelsByCountryId(id).forEach(hotel -> listHotels.add(modelMapper.map(hotel, HotelDto.class)));
+        model.addAttribute("listHotels", listHotels);
+        model.addAttribute("country", country);
+        return "country_info";
+    }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @PostMapping(value = "/save")
     public String saveCountry(@ModelAttribute("country") CountryDto countryDto) {
         countryService.createCountry(modelMapper.map(countryDto, Country.class));
         return "redirect:/countries";
     }
 
-    @RequestMapping("/edit")
-    public ModelAndView editCountryForm(@RequestParam long id) {
-        ModelAndView mav = new ModelAndView("edit_country");
+    @GetMapping("/edit")
+    public String editCountryForm(@RequestParam long id, Model model) {
         CountryDto country = modelMapper.map(countryService.getCountryById(id), CountryDto.class);
-        mav.addObject("country", country);
-
-        return mav;
+        List<VisaDto> visaList = new ArrayList<>();
+        visaService.getAllVisas().forEach(visa -> visaList.add(
+                modelMapper.map(visa, VisaDto.class)));
+        model.addAttribute("country", country);
+        model.addAttribute("visaList", visaList);
+        return "edit_country";
     }
 
-    @RequestMapping(value = "/saveEditing", method = RequestMethod.POST)
-    public String saveEditing(@ModelAttribute("country") CountryDto countryDto){
+    @PostMapping(value = "/saveEditing")
+    public String saveEditing(@ModelAttribute("country") CountryDto countryDto) {
         countryService.updateCountry(modelMapper.map(countryDto, Country.class));
         return "redirect:/countries";
     }
 
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
     public String deleteCountryForm(@RequestParam Long id) {
         countryService.deleteCountryById(id);
         return "redirect:/countries";
     }
-
-    @ModelAttribute("viasaList")
-    public List<VisaDto> getVisaList() {
-        List<VisaDto> visaList = new ArrayList<>();
-        visaService.getAllVisas().forEach(visa -> visaList.add(
-                modelMapper.map(visa, VisaDto.class)));
-        return visaList;
-    }
-
 }

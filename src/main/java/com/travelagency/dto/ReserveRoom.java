@@ -18,9 +18,9 @@ public class ReserveRoom {
     private Long id;
     private String name;
 
-    @DateTimeFormat(pattern = "yy-mm-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate firstDate;
 
-    @DateTimeFormat(pattern = "yy-mm-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate secondDate;
 }

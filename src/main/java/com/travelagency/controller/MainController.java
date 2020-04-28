@@ -1,23 +1,18 @@
 package com.travelagency.controller;
 
-import com.travelagency.dto.*;
-import com.travelagency.entity.Hotel;
-import com.travelagency.entity.Order;
-import com.travelagency.entity.Room;
+import com.travelagency.dto.CountryDto;
+import com.travelagency.dto.DateAndCountryDto;
+import com.travelagency.dto.UserRegisterDto;
 import com.travelagency.entity.User;
 import com.travelagency.enums.UserRole;
-import com.travelagency.service.*;
-import lombok.SneakyThrows;
+import com.travelagency.service.CountryService;
+import com.travelagency.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -26,23 +21,16 @@ import java.util.List;
 @Controller
 public class MainController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final CountryService countryService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private HotelService hotelService;
-
-    @Autowired
-    private CountryService countryService;
-
-    @Autowired
-    private RoomService roomService;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private OrderService orderService;
+    public MainController(UserService userService, CountryService countryService, ModelMapper modelMapper) {
+        this.userService = userService;
+        this.countryService = countryService;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping("/")
     public String printLogo() {
@@ -82,81 +70,5 @@ public class MainController {
         model.addAttribute("countryList", countryDtos);
         model.addAttribute("dateAndCountryDto", dateAndCountryDto);
         return "userMainPage";
-    }
-
-    @SneakyThrows
-    @PostMapping("/freeHotel/{id}")
-    public ModelAndView showFreeHotels(@PathVariable(name = "id") Long id, DateAndCountryDto dateAndCountryDto) {
-        List<HotelDto> listHotels = new ArrayList<>();
-        List<HotelDto> list = new ArrayList<>();
-
-        CountryDto country = modelMapper.map(countryService.getCountryById(id), CountryDto.class);
-
-        List<Hotel> allHotelsByCountryId = hotelService.getAllHotelsByCountryId(id);
-        allHotelsByCountryId.forEach(hotel -> listHotels.add(modelMapper.map(hotel, HotelDto.class)));
-
-        List<Hotel> allFreeHotelOnCertainPeriod = hotelService.getAllFreeHotelOnCertainPeriod(id, dateAndCountryDto.getFirstDate(), dateAndCountryDto.getSecondDate());
-        allFreeHotelOnCertainPeriod.forEach(hotel -> list.add(modelMapper.map(hotel, HotelDto.class)));
-
-        listHotels.removeAll(list);
-
-        ModelAndView mav = new ModelAndView("country_info");
-        mav.addObject("listHotels", listHotels);
-        mav.addObject("country", country);
-        return mav;
-    }
-
-    @GetMapping("/reserveRoom/{id}")
-    public String reserveRoom(@PathVariable(name = "id") Long id, Model model) {
-        ReserveRoom reserveRoom = new ReserveRoom();
-        List<RoomDto> roomList = new ArrayList<>();
-        roomService.getAllRoomsByHotelId(id).forEach(room -> roomList.add(
-                modelMapper.map(room, RoomDto.class)));
-        model.addAttribute("roomList", roomList);
-        model.addAttribute("hotel", "hotel");
-        model.addAttribute("reserveRoom", reserveRoom);
-        return "reserveRoom";
-    }
-
-    @PostMapping("/reserveRoom/{id}")
-    public String reserveRoomSave(@PathVariable(name = "id") Long id, ReserveRoom reserveRoom, Authentication authentication) {
-
-        User userByEmail = userService.getUserByEmail(authentication.getName());
-        Order order = new Order();
-        order.setStartBooking(reserveRoom.getFirstDate());
-        order.setEndBooking(reserveRoom.getSecondDate());
-        Room room = new Room();
-        room.setId(id);
-        order.setRoom(room);
-        order.setUser(userByEmail);
-
-        orderService.createOrder(order);
-
-        return "index";
-    }
-
-    @GetMapping("/listUsers")
-    public ModelAndView userList() {
-        List<UserDto> listUserDto = new ArrayList<>();
-        userService.getAllUsers().forEach(user -> listUserDto.add(modelMapper.map(user, UserDto.class)));
-        System.out.println(listUserDto);
-        ModelAndView mav = new ModelAndView("usersList");
-        mav.addObject("listUserDto", listUserDto);
-        return mav;
-    }
-
-    @GetMapping("/userStatistic/{id}")
-    public String userStatistic(@PathVariable(name = "id") Long id, Model model) {
-        List<String> listCountriesWhereWasUser = userService.getListCountriesWhereWasUser(id);
-        List<String> listVisasWhichHasUser = userService.getListVisasWhichHasUser(id);
-        model.addAttribute("listCountriesWhereWasUser", listCountriesWhereWasUser);
-        model.addAttribute("listVisasWhichHasUser", listVisasWhichHasUser);
-        return "userStatistic";
-    }
-
-    @DeleteMapping("/delete/user/{id}")
-    public String deleteCustomerForm(@PathVariable(name = "id") Long id) {
-        userService.deleteById(id);
-        return "redirect:/listUsers";
     }
 }
