@@ -14,8 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class VisaServiceImpl implements VisaService {
 
+    private final VisaDao visaDao;
+
     @Autowired
-    private VisaDao visaDao;
+    public VisaServiceImpl(VisaDao visaDao) {
+        this.visaDao = visaDao;
+    }
 
     @Override
     public Visa getVisaById(Long id) {

@@ -1,6 +1,5 @@
 package com.travelagency.mapping;
 
-import com.travelagency.dto.CountryDto;
 import com.travelagency.dto.HotelDto;
 import com.travelagency.entity.Hotel;
 import org.modelmapper.AbstractConverter;

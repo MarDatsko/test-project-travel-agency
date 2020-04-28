@@ -1,9 +1,7 @@
 package com.travelagency.dao.impl;
 
 import com.travelagency.dao.HotelDao;
-import com.travelagency.entity.Country;
 import com.travelagency.entity.Hotel;
-import java.math.BigInteger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -16,14 +14,19 @@ import java.util.List;
 @Repository
 public class HotelDaoImpl implements HotelDao {
 
+    private final EntityManagerFactory entityManagerFactory;
+
     @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    public HotelDaoImpl(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
 
     @Override
     public Hotel getHotelById(Long id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        Hotel hotel = entityManager.find(Hotel.class, id);
+        Hotel hotel = entityManager
+                .find(Hotel.class, id);
         entityManager.getTransaction().commit();
         entityManager.close();
         return hotel;
@@ -90,7 +93,6 @@ public class HotelDaoImpl implements HotelDao {
                 .setParameter("id", hotel.getId())
                 .setParameter("name", hotel.getName())
                 .executeUpdate();
-
         entityManager.getTransaction().commit();
         entityManager.close();
         return hotel;

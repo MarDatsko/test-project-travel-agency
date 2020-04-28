@@ -14,8 +14,12 @@ import java.util.List;
 @Repository
 public class UserDaoImpl implements UserDao {
 
+    private final EntityManagerFactory entityManagerFactory;
+
     @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    public UserDaoImpl(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
 
     @Override
     public User getUserById(Long id) {

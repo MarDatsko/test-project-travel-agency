@@ -14,14 +14,19 @@ import java.util.List;
 @Repository
 public class RoomDaoImpl implements RoomDao {
 
+    private final EntityManagerFactory entityManagerFactory;
+
     @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    public RoomDaoImpl(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
 
     @Override
     public Room getRoomById(Long id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        Room room = entityManager.find(Room.class, id);
+        Room room = entityManager
+                .find(Room.class, id);
         entityManager.getTransaction().commit();
         entityManager.close();
         return room;

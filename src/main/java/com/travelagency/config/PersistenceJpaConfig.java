@@ -26,11 +26,12 @@ import java.util.Properties;
 @EnableJpaRepositories(basePackages = "com.travelagency.dao")
 public class PersistenceJpaConfig {
 
-    @Autowired
-    private Environment env;
+    private final Environment env;
 
-    public PersistenceJpaConfig() {
+    @Autowired
+    public PersistenceJpaConfig(Environment env) {
         super();
+        this.env = env;
     }
 
     @Bean
@@ -38,11 +39,9 @@ public class PersistenceJpaConfig {
         final LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setPackagesToScan(new String[]{"com.travelagency.entity"});
-
         final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
         entityManagerFactoryBean.setJpaProperties(additionalProperties());
-
         return entityManagerFactoryBean;
     }
 

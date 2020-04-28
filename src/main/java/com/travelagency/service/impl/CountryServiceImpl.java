@@ -7,6 +7,7 @@ import com.travelagency.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CountryServiceImpl implements CountryService {
 
+    private final CountryDao countryDao;
+
     @Autowired
-    private CountryDao countryDao;
+    public CountryServiceImpl(CountryDao countryDao) {
+        this.countryDao = countryDao;
+    }
 
     @Override
     public Country createCountry(Country country) {

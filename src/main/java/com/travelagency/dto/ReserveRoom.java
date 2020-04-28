@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -18,8 +19,8 @@ public class ReserveRoom {
     private String name;
 
     @DateTimeFormat(pattern = "yy-mm-dd")
-    private Date firstDate;
+    private LocalDate firstDate;
 
     @DateTimeFormat(pattern = "yy-mm-dd")
-    private Date secondDate;
+    private LocalDate secondDate;
 }

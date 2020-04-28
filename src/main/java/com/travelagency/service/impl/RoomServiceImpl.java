@@ -15,8 +15,12 @@ import java.util.List;
 @Service
 public class RoomServiceImpl implements RoomService {
 
+    private final RoomDao roomDao;
+
     @Autowired
-    private RoomDao roomDao;
+    public RoomServiceImpl(RoomDao roomDao) {
+        this.roomDao = roomDao;
+    }
 
     @Override
     public Room getRoomById(Long id) {

@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "tb_visas")
 public class Visa {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

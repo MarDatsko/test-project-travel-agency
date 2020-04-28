@@ -8,6 +8,7 @@ import lombok.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class VisaDto {
+
     private Long id;
     private String name;
 }

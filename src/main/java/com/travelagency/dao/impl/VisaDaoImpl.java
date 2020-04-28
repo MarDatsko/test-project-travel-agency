@@ -12,14 +12,19 @@ import java.util.List;
 @Repository
 public class VisaDaoImpl implements VisaDao {
 
+    private final EntityManagerFactory entityManagerFactory;
+
     @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    public VisaDaoImpl(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
 
     @Override
     public Visa getVisaById(Long id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        Visa visa = entityManager.find(Visa.class, id);
+        Visa visa = entityManager
+                .find(Visa.class, id);
         entityManager.getTransaction().commit();
         entityManager.close();
         return visa;

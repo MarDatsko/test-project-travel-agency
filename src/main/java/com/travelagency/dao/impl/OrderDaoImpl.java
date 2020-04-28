@@ -11,8 +11,12 @@ import javax.persistence.EntityManagerFactory;
 @Repository
 public class OrderDaoImpl implements OrderDao {
 
+    private final EntityManagerFactory entityManagerFactory;
+
     @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    public OrderDaoImpl(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
 
     @Override
     public Order createOrder(Order order) {

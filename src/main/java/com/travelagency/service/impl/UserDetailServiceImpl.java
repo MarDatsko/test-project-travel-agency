@@ -15,8 +15,12 @@ import java.util.Set;
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserDetailServiceImpl(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) {
