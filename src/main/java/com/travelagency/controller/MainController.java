@@ -34,12 +34,12 @@ public class MainController {
 
     @GetMapping("/")
     public String printLogo() {
-        return "index";
+        return "main/index";
     }
 
     @GetMapping("/register")
     public String printRegisterForm() {
-        return "register";
+        return "main/register";
     }
 
     @PostMapping("/register")
@@ -53,12 +53,12 @@ public class MainController {
             user.setPassword(userRegisterDto.getPassword());
             user.setUserRole(UserRole.ROLE_USER);
             userService.createUser(user);
-            return "redirect:/login";
+            return "main/login";
         }
 
         model.addAttribute("message", "User with this email "
                 + userRegisterDto.getEmail() + " already created");
-        return "infoPage";
+        return "main/exception_page";
     }
 
     @GetMapping("/mainPage")
@@ -69,6 +69,6 @@ public class MainController {
                 modelMapper.map(country, CountryDto.class)));
         model.addAttribute("countryList", countryDtos);
         model.addAttribute("dateAndCountryDto", dateAndCountryDto);
-        return "userMainPage";
+        return "main/main_page";
     }
 }

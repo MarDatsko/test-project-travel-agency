@@ -58,7 +58,7 @@ public class RoomController {
         model.addAttribute("day", "days");
         model.addAttribute("logo", "Room occupancy over a period of time");
         model.addAttribute("statistic", roomOccupancy);
-        return "hotelStatistic";
+        return "hotel/statistic_hotel";
     }
 
     @GetMapping("/reserveRoom/{id}")
@@ -70,7 +70,7 @@ public class RoomController {
         model.addAttribute("roomList", roomList);
         model.addAttribute("hotel", "hotel");
         model.addAttribute("reserveRoom", reserveRoom);
-        return "reserveRoom";
+        return "room/reserve_room";
     }
 
     @PostMapping("/reserveRoom/{id}")
@@ -87,6 +87,6 @@ public class RoomController {
 
         orderService.createOrder(order);
 
-        return "index";
+        return "main/index";
     }
 }

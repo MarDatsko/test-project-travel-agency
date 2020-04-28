@@ -27,13 +27,12 @@ public class UserController {
     }
 
     @GetMapping("/listUsers")
-    public ModelAndView userList() {
+    public String userList(Model model) {
         List<UserDto> listUserDto = new ArrayList<>();
         userService.getAllUsers().forEach(user -> listUserDto.add(modelMapper.map(user, UserDto.class)));
         System.out.println(listUserDto);
-        ModelAndView mav = new ModelAndView("usersList");
-        mav.addObject("listUserDto", listUserDto);
-        return mav;
+        model.addAttribute("listUserDto", listUserDto);
+        return "user/list_users";
     }
 
     @GetMapping("/userStatistic/{id}")
@@ -42,7 +41,7 @@ public class UserController {
         List<String> listVisasWhichHasUser = userService.getListVisasWhichHasUser(id);
         model.addAttribute("listCountriesWhereWasUser", listCountriesWhereWasUser);
         model.addAttribute("listVisasWhichHasUser", listVisasWhichHasUser);
-        return "userStatistic";
+        return "user/statistic_user";
     }
 
     @DeleteMapping("/delete/user/{id}")

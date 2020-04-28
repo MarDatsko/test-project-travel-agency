@@ -38,14 +38,14 @@ public class CountryController {
         countryService.getAllCountries().forEach(country -> listCountries.add(
                 modelMapper.map(country, CountryDto.class)));
         model.addAttribute("listCountries", listCountries);
-        return "countries";
+        return "country/list_countries";
     }
 
     @GetMapping("/new_country")
     public String newCountryForm(Model model) {
         CountryDto country = new CountryDto();
         model.addAttribute("country", country);
-        return "new_country";
+        return "country/create_country";
     }
 
     @GetMapping("/country")
@@ -55,13 +55,13 @@ public class CountryController {
         hotelService.getAllHotelsByCountryId(id).forEach(hotel -> listHotels.add(modelMapper.map(hotel, HotelDto.class)));
         model.addAttribute("listHotels", listHotels);
         model.addAttribute("country", country);
-        return "country_info";
+        return "hotel/list_hotels";
     }
 
     @PostMapping(value = "/save")
     public String saveCountry(@ModelAttribute("country") CountryDto countryDto) {
         countryService.createCountry(modelMapper.map(countryDto, Country.class));
-        return "redirect:/countries";
+        return "country/list_countries";
     }
 
     @GetMapping("/edit")
@@ -72,18 +72,18 @@ public class CountryController {
                 modelMapper.map(visa, VisaDto.class)));
         model.addAttribute("country", country);
         model.addAttribute("visaList", visaList);
-        return "edit_country";
+        return "country/edit_country";
     }
 
     @PostMapping(value = "/saveEditing")
     public String saveEditing(@ModelAttribute("country") CountryDto countryDto) {
         countryService.updateCountry(modelMapper.map(countryDto, Country.class));
-        return "redirect:/countries";
+        return "country/list_countries";
     }
 
     @DeleteMapping("/delete")
     public String deleteCountryForm(@RequestParam Long id) {
         countryService.deleteCountryById(id);
-        return "redirect:/countries";
+        return "country/list_countries";
     }
 }

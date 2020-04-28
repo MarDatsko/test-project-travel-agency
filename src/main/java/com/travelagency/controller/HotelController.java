@@ -51,7 +51,7 @@ public class HotelController {
         model.addAttribute("hotel", hotelDto);
         model.addAttribute("listRooms", listRooms);
         model.addAttribute("room", room);
-        return "hotelStatistic";
+        return "hotel/statistic_hotel";
     }
 
     @PostMapping(value = "/saveHotel")
@@ -66,7 +66,7 @@ public class HotelController {
         HotelDto hotelDto = new HotelDto();
         model.addAttribute("hotel", hotelDto);
         model.addAttribute("country_id", country_id);
-        return "create_hotel";
+        return "hotel/create_hotel";
     }
 
     @PostMapping(value = "/saveHotel/{country_id}")
@@ -87,7 +87,7 @@ public class HotelController {
         HotelDto hotelDto = modelMapper.map(hotelService.getHotelById(hotel_id), HotelDto.class);
         model.addAttribute("hotel", hotelDto);
         model.addAttribute("country_id", country_id);
-        return "edit_hotel";
+        return "hotel/edit_hotel";
     }
 
     @PostMapping(value = "/saveHotelEditing/{country_id}")
@@ -121,6 +121,6 @@ public class HotelController {
 
         model.addAttribute("listHotels", listHotels);
         model.addAttribute("country", country);
-        return "country_info";
+        return "hotel/list_hotels";
     }
 }
