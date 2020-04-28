@@ -1,10 +1,6 @@
 package com.travelagency.config;
 
-import com.travelagency.mapping.CountryDtoMapper;
-import com.travelagency.mapping.CountryFromDtoMapper;
-import com.travelagency.mapping.HotelDtoMapper;
-import com.travelagency.mapping.RoomDtoMapper;
-import com.travelagency.mapping.VisaDtoMapper;
+import com.travelagency.mapping.*;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -20,6 +16,7 @@ public class MapperConfig {
     private RoomDtoMapper roomDtoMapper;
     private VisaDtoMapper visaDtoMapper;
     private CountryFromDtoMapper countryFromDtoMapper;
+    private UserDtoMapper userDtoMapper;
 
     @Bean
     public ModelMapper modelMapper() {
@@ -34,6 +31,7 @@ public class MapperConfig {
         mapper.addConverter(roomDtoMapper);
         mapper.addConverter(visaDtoMapper);
         mapper.addConverter(countryFromDtoMapper);
+        mapper.addConverter(userDtoMapper);
         return mapper;
     }
 }
