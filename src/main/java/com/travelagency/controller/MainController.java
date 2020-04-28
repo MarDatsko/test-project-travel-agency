@@ -136,4 +136,23 @@ public class MainController {
 
         return "index";
     }
+
+    @GetMapping("/listUsers")
+    public ModelAndView userList() {
+        List<UserDto> listUserDto = new ArrayList<>();
+        userService.getAllUsers().forEach(user -> listUserDto.add(modelMapper.map(user, UserDto.class)));
+        System.out.println(listUserDto);
+        ModelAndView mav = new ModelAndView("usersList");
+        mav.addObject("listUserDto", listUserDto);
+        return mav;
+    }
+
+    @GetMapping("/userStatistic/{id}")
+    public String userStatistic(@PathVariable(name = "id") Long id, Model model) {
+        List<String> listCountriesWhereWasUser = userService.getListCountriesWhereWasUser(id);
+        List<String> listVisasWhichHasUser = userService.getListVisasWhichHasUser(id);
+        model.addAttribute("listCountriesWhereWasUser", listCountriesWhereWasUser);
+        model.addAttribute("listVisasWhichHasUser", listVisasWhichHasUser);
+        return "userStatistic";
+    }
 }

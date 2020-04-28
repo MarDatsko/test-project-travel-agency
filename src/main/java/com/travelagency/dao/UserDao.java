@@ -17,4 +17,6 @@ public interface UserDao {
     List<String> getListCountriesWhereWasUser(Long userId);
 
     List<String> getListVisasWhichHasUser(Long userId);
+
+    List<User> getAllUsers();
 }

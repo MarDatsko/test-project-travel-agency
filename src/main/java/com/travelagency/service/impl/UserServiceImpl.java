@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmail(String email) {
         User userByEmail = userDao.getUserByEmail(email);
         if (userByEmail == null) {
-        //    throw new ResourceNotFoundException(email);
+            //    throw new ResourceNotFoundException(email);
         }
         return userByEmail;
     }
@@ -59,5 +59,14 @@ public class UserServiceImpl implements UserService {
             throw new ResourceNotFoundException("Didn't find any visas");
         }
         return listVisas;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        List<User> listUsers = userDao.getAllUsers();
+        if (listUsers == null || listUsers.isEmpty()) {
+            throw new ResourceNotFoundException("Didn't find any visas");
+        }
+        return listUsers;
     }
 }

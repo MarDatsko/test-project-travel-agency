@@ -44,10 +44,10 @@ public class UserDaoImpl implements UserDao {
         entityManager.getTransaction().begin();
         User user = null;
         try {
-             user = (User) entityManager
+            user = (User) entityManager
                     .createNativeQuery("SELECT * FROM tb_users WHERE email= :email", User.class)
                     .setParameter("email", email).getSingleResult();
-        }catch (NoResultException e){
+        } catch (NoResultException e) {
             e.printStackTrace();
         }
         entityManager.getTransaction().commit();
@@ -75,7 +75,7 @@ public class UserDaoImpl implements UserDao {
                         " LEFT JOIN travel.tb_hotels ON travel.tb_countries.id = travel.tb_hotels.country_id " +
                         " LEFT JOIN travel.tb_rooms ON travel.tb_hotels.id = travel.tb_rooms.hotel_id " +
                         " LEFT JOIN travel.tb_orders ON travel.tb_rooms.id = travel.tb_orders.room_id " +
-                        " WHERE user_id = :userId ", String.class)
+                        " WHERE user_id = :userId ")
                 .setParameter("userId", userId)
                 .getResultList();
         entityManager.getTransaction().commit();
@@ -88,16 +88,26 @@ public class UserDaoImpl implements UserDao {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         List<String> listVisas = entityManager
-                .createNativeQuery(" SELECT DISTINCT visa_name FROM travel.tb_countries " +
-                        " LEFT JOIN travel.tb_hotels ON travel.tb_countries.id = travel.tb_hotels.country_id " +
-                        " LEFT JOIN travel.tb_rooms ON travel.tb_hotels.id = travel.tb_rooms.hotel_id " +
-                        " LEFT JOIN travel.tb_orders ON travel.tb_rooms.id = travel.tb_orders.room_id " +
-                        " LEFT JOIN travel.tb_visas ON travel.tb_countries.visa_id = travel.tb_visas.id " +
-                        " WHERE user_id = :userId ", String.class)
+                .createNativeQuery(" SELECT DISTINCT visa_name FROM travel.user_visa " +
+                        " LEFT JOIN travel.tb_users ON travel.user_visa.user_id = travel.tb_users.id " +
+                        " LEFT JOIN travel.tb_visas ON travel.user_visa.visa_id = travel.tb_visas.id " +
+                        " WHERE user_id = :userId")
                 .setParameter("userId", userId)
                 .getResultList();
         entityManager.getTransaction().commit();
         entityManager.close();
         return listVisas;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        List<User> listUsers = entityManager
+                .createNativeQuery("SELECT * FROM tb_users", User.class)
+                .getResultList();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        return listUsers;
     }
 }

@@ -57,7 +57,7 @@
             <input type="submit" value="Save"></td
         </form:form>
 
-        <div><a href="/userStatistic">Statistics </a></div>
+        <div><a href="/listUsers">Statistics </a></div>
     </div>
 </body>
 </html>
