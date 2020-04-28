@@ -17,6 +17,8 @@ public interface HotelDao {
 
     Hotel createHotel(Hotel hotel);
 
+    Hotel updateHotel (Hotel hotel);
+
     List<Hotel> getAllFreeHotelOnCertainPeriod(Long id, LocalDate firstDate, LocalDate secondDate);
 
     Long getCountHotelClients(Long hotelId);
