@@ -62,7 +62,7 @@ public class MainController {
     }
 
     @GetMapping("/mainPage")
-    public String sendUser(Model model, HttpSession session) {
+    public String printMainPage(Model model) {
         DateAndCountryDto dateAndCountryDto = new DateAndCountryDto();
         List<CountryDto> countryDtos = new ArrayList<>();
         countryService.getAllCountries().forEach(country -> countryDtos.add(

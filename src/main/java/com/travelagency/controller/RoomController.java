@@ -42,7 +42,7 @@ public class RoomController {
     }
 
     @PostMapping("/roomStatistic/{id}")
-    public String roomStatistic(@PathVariable(name = "id") long id, Model model, DateAndCountryDto dateAndCountryDto) {
+    public String getRoomStatistic(@PathVariable(name = "id") long id, Model model, DateAndCountryDto dateAndCountryDto) {
         Long roomOccupancy = roomService.getRoomOccupancy(id, dateAndCountryDto.getFirstDate(), dateAndCountryDto.getSecondDate());
         Long numberOfCustomers = hotelService.getCountHotelClient(id);
         Long averageReserveTime = hotelService.getAverageReserveTime(id);
@@ -62,7 +62,7 @@ public class RoomController {
     }
 
     @GetMapping("/reserveRoom/{id}")
-    public String reserveRoom(@PathVariable(name = "id") Long id, Model model) {
+    public String printReserveRoomForm(@PathVariable(name = "id") Long id, Model model) {
         ReserveRoom reserveRoom = new ReserveRoom();
         List<RoomDto> roomList = new ArrayList<>();
         roomService.getAllRoomsByHotelId(id).forEach(room -> roomList.add(
@@ -74,7 +74,7 @@ public class RoomController {
     }
 
     @PostMapping("/reserveRoom/{id}")
-    public String reserveRoomSave(@PathVariable(name = "id") Long id, ReserveRoom reserveRoom, Authentication authentication) {
+    public String reserveRoom(@PathVariable(name = "id") Long id, ReserveRoom reserveRoom, Authentication authentication) {
 
         User userByEmail = userService.getUserByEmail(authentication.getName());
         Order order = new Order();

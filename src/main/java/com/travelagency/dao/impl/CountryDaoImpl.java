@@ -2,14 +2,17 @@ package com.travelagency.dao.impl;
 
 import com.travelagency.dao.CountryDao;
 import com.travelagency.entity.Country;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 @Repository
+@Log4j2
 public class CountryDaoImpl implements CountryDao {
 
     private final EntityManagerFactory entityManagerFactory;
@@ -49,9 +52,14 @@ public class CountryDaoImpl implements CountryDao {
     public List<Country> getAllCountries() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        List<Country> listCountries = entityManager
-                .createNativeQuery("SELECT * FROM tb_countries", Country.class)
-                .getResultList();
+        List<Country> listCountries = null;
+        try {
+            listCountries = entityManager
+                    .createNativeQuery("SELECT * FROM tb_countries", Country.class)
+                    .getResultList();
+        } catch (NoResultException e) {
+            log.warn("List countries not found");
+        }
         entityManager.getTransaction().commit();
         entityManager.close();
         return listCountries;
@@ -61,8 +69,13 @@ public class CountryDaoImpl implements CountryDao {
     public Country getCountryById(Long id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        Country country = entityManager
-                .find(Country.class, id);
+        Country country = null;
+        try {
+            country = entityManager
+                    .find(Country.class, id);
+        } catch (NoResultException e) {
+            log.warn("Country not found");
+        }
         entityManager.getTransaction().commit();
         entityManager.close();
         return country;

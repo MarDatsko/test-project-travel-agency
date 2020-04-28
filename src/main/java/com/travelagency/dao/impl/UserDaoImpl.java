@@ -3,6 +3,7 @@ package com.travelagency.dao.impl;
 import com.travelagency.dao.UserDao;
 import com.travelagency.entity.User;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +13,7 @@ import javax.persistence.NoResultException;
 import java.util.List;
 
 @Repository
+@Log4j2
 public class UserDaoImpl implements UserDao {
 
     private final EntityManagerFactory entityManagerFactory;
@@ -25,7 +27,12 @@ public class UserDaoImpl implements UserDao {
     public User getUserById(Long id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        User user = entityManager.find(User.class, id);
+        User user = null;
+        try {
+            user = entityManager.find(User.class, id);
+        } catch (NoResultException e) {
+            log.warn("User by id not found");
+        }
         entityManager.getTransaction().commit();
         entityManager.close();
         return user;
@@ -52,7 +59,7 @@ public class UserDaoImpl implements UserDao {
                     .createNativeQuery("SELECT * FROM tb_users WHERE email= :email", User.class)
                     .setParameter("email", email).getSingleResult();
         } catch (NoResultException e) {
-            e.printStackTrace();
+            log.warn("User by email not found");
         }
         entityManager.getTransaction().commit();
         entityManager.close();
@@ -74,14 +81,19 @@ public class UserDaoImpl implements UserDao {
     public List<String> getListCountriesWhereWasUser(Long userId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        List<String> listCountries = entityManager
-                .createNativeQuery(" SELECT DISTINCT country_name FROM travel.tb_countries " +
-                        " LEFT JOIN travel.tb_hotels ON travel.tb_countries.id = travel.tb_hotels.country_id " +
-                        " LEFT JOIN travel.tb_rooms ON travel.tb_hotels.id = travel.tb_rooms.hotel_id " +
-                        " LEFT JOIN travel.tb_orders ON travel.tb_rooms.id = travel.tb_orders.room_id " +
-                        " WHERE user_id = :userId ")
-                .setParameter("userId", userId)
-                .getResultList();
+        List<String> listCountries = null;
+        try {
+            listCountries = entityManager
+                    .createNativeQuery(" SELECT DISTINCT country_name FROM travel.tb_countries " +
+                            " LEFT JOIN travel.tb_hotels ON travel.tb_countries.id = travel.tb_hotels.country_id " +
+                            " LEFT JOIN travel.tb_rooms ON travel.tb_hotels.id = travel.tb_rooms.hotel_id " +
+                            " LEFT JOIN travel.tb_orders ON travel.tb_rooms.id = travel.tb_orders.room_id " +
+                            " WHERE user_id = :userId ")
+                    .setParameter("userId", userId)
+                    .getResultList();
+        } catch (NoResultException e) {
+            log.warn("List countries not found");
+        }
         entityManager.getTransaction().commit();
         entityManager.close();
         return listCountries;
@@ -91,13 +103,18 @@ public class UserDaoImpl implements UserDao {
     public List<String> getListVisasWhichHasUser(Long userId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        List<String> listVisas = entityManager
-                .createNativeQuery(" SELECT DISTINCT visa_name FROM travel.user_visa " +
-                        " LEFT JOIN travel.tb_users ON travel.user_visa.user_id = travel.tb_users.id " +
-                        " LEFT JOIN travel.tb_visas ON travel.user_visa.visa_id = travel.tb_visas.id " +
-                        " WHERE user_id = :userId")
-                .setParameter("userId", userId)
-                .getResultList();
+        List<String> listVisas = null;
+        try {
+            listVisas = entityManager
+                    .createNativeQuery(" SELECT DISTINCT visa_name FROM travel.user_visa " +
+                            " LEFT JOIN travel.tb_users ON travel.user_visa.user_id = travel.tb_users.id " +
+                            " LEFT JOIN travel.tb_visas ON travel.user_visa.visa_id = travel.tb_visas.id " +
+                            " WHERE user_id = :userId")
+                    .setParameter("userId", userId)
+                    .getResultList();
+        } catch (NoResultException e) {
+            log.warn("List visas not found");
+        }
         entityManager.getTransaction().commit();
         entityManager.close();
         return listVisas;
@@ -107,9 +124,14 @@ public class UserDaoImpl implements UserDao {
     public List<User> getAllUsers() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        List<User> listUsers = entityManager
-                .createNativeQuery("SELECT * FROM tb_users", User.class)
-                .getResultList();
+        List<User> listUsers = null;
+        try {
+            listUsers = entityManager
+                    .createNativeQuery("SELECT * FROM tb_users", User.class)
+                    .getResultList();
+        } catch (NoResultException e) {
+            log.warn("List users not found");
+        }
         entityManager.getTransaction().commit();
         entityManager.close();
         return listUsers;

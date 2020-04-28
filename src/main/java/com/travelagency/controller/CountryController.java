@@ -33,7 +33,7 @@ public class CountryController {
     }
 
     @GetMapping("/countries")
-    public String countries(Model model) {
+    public String printListCountries(Model model) {
         List<CountryDto> listCountries = new ArrayList<>();
         countryService.getAllCountries().forEach(country -> listCountries.add(
                 modelMapper.map(country, CountryDto.class)));
@@ -42,20 +42,10 @@ public class CountryController {
     }
 
     @GetMapping("/new_country")
-    public String newCountryForm(Model model) {
-        CountryDto country = new CountryDto();
-        model.addAttribute("country", country);
+    public String printNewCountryForm(Model model) {
+        CountryDto countryDto = new CountryDto();
+        model.addAttribute("country", countryDto);
         return "country/create_country";
-    }
-
-    @GetMapping("/country")
-    public String findCountryById(@RequestParam Long id, Model model) {
-        List<HotelDto> listHotels = new ArrayList<>();
-        CountryDto country = modelMapper.map(countryService.getCountryById(id), CountryDto.class);
-        hotelService.getAllHotelsByCountryId(id).forEach(hotel -> listHotels.add(modelMapper.map(hotel, HotelDto.class)));
-        model.addAttribute("listHotels", listHotels);
-        model.addAttribute("country", country);
-        return "hotel/list_hotels";
     }
 
     @PostMapping(value = "/save")
@@ -82,7 +72,7 @@ public class CountryController {
     }
 
     @DeleteMapping("/delete")
-    public String deleteCountryForm(@RequestParam Long id) {
+    public String deleteCountry(@RequestParam Long id) {
         countryService.deleteCountryById(id);
         return "country/list_countries";
     }

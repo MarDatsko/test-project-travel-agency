@@ -14,10 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +36,7 @@ public class HotelController {
     }
 
     @GetMapping("/hotelStatistic/{id}")
-    public String hotelStatistic(@PathVariable(name = "id") long id, Model model) {
+    public String getHotelStatistic(@PathVariable(name = "id") long id, Model model) {
         Long numberOfCustomers = hotelService.getCountHotelClient(id);
         Long averageReserveTime = hotelService.getAverageReserveTime(id);
         HotelDto hotelDto = modelMapper.map(hotelService.getHotelById(id), HotelDto.class);
@@ -119,6 +116,16 @@ public class HotelController {
 
         listHotels.removeAll(list);
 
+        model.addAttribute("listHotels", listHotels);
+        model.addAttribute("country", country);
+        return "hotel/list_hotels";
+    }
+
+    @GetMapping("/country")
+    public String printListHotels(@RequestParam Long id, Model model) {
+        List<HotelDto> listHotels = new ArrayList<>();
+        CountryDto country = modelMapper.map(countryService.getCountryById(id), CountryDto.class);
+        hotelService.getAllHotelsByCountryId(id).forEach(hotel -> listHotels.add(modelMapper.map(hotel, HotelDto.class)));
         model.addAttribute("listHotels", listHotels);
         model.addAttribute("country", country);
         return "hotel/list_hotels";
