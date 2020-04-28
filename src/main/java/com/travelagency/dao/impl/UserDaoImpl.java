@@ -60,8 +60,8 @@ public class UserDaoImpl implements UserDao {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         entityManager
-                .createNativeQuery("DELETE FROM tb_users WHERE id= :id", User.class)
-                .setParameter("id", id);
+                .createNativeQuery("DELETE FROM tb_users WHERE id= :id")
+                .setParameter("id", id).executeUpdate();
         entityManager.getTransaction().commit();
         entityManager.close();
     }

@@ -31,9 +31,7 @@ Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
                 <td>${user.userRole}</td>
                 <sec:authorize access="hasRole('ROLE_MANAGER')">
                     <td>
-                        <a href="/edit?id=${user.id}">Edit</a>
-                        &nbsp;&nbsp;&nbsp;
-                        <a href="/delete?id=${user.id}">Delete</a>
+                        <a href="/delete/user/${user.id}">Delete</a>
                         &nbsp;&nbsp;&nbsp;
                         <a href="/userStatistic/${user.id}">Statistic</a>
                     </td>

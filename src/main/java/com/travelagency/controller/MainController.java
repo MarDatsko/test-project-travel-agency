@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,15 +59,12 @@ public class MainController {
         User userByEmail = userService.getUserByEmail(userRegisterDto.getEmail());
         if (userByEmail == null) {
             User user = new User();
-            System.out.println("=================================");
             user.setFirstName(userRegisterDto.getFirstName());
             user.setLastName(userRegisterDto.getLastName());
             user.setEmail(userRegisterDto.getEmail());
             user.setPassword(userRegisterDto.getPassword());
             user.setUserRole(UserRole.ROLE_USER);
-
             userService.createUser(user);
-
             return "redirect:/login";
         }
 
@@ -154,5 +152,11 @@ public class MainController {
         model.addAttribute("listCountriesWhereWasUser", listCountriesWhereWasUser);
         model.addAttribute("listVisasWhichHasUser", listVisasWhichHasUser);
         return "userStatistic";
+    }
+
+    @DeleteMapping("/delete/user/{id}")
+    public String deleteCustomerForm(@PathVariable(name = "id") Long id) {
+        userService.deleteById(id);
+        return "redirect:/listUsers";
     }
 }
