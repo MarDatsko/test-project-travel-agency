@@ -2,6 +2,7 @@
          pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -32,6 +33,9 @@
 <body>
     <div>
         <h2>Travel Agency "Sun"</h2>
+        <form action="/logout" method="post">
+            <input type="submit" value="Logout" />
+        </form>
         <form:form action="" method="post" modelAttribute="dateAndCountryDto" onsubmit="this.action=get_action();">
             <p>We work with such countries, you can see the list of these countries --->
                 <a href="/countries">here</a>
@@ -57,7 +61,9 @@
             <input type="submit" value="Save"></td
         </form:form>
 
-        <div><a href="/listUsers">Statistics </a></div>
+        <sec:authorize access="hasRole('ROLE_MANAGER')">
+        <div><h2><a href="/listUsers">User Statistics </a></h2></div>
+        </sec:authorize>
     </div>
 </body>
 </html>

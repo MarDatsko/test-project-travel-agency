@@ -45,7 +45,11 @@ public class CountryController {
     @GetMapping("/new_country")
     public String printNewCountryForm(Model model) {
         CountryDto countryDto = new CountryDto();
+        List<VisaDto> visaList = new ArrayList<>();
+        visaService.getAllVisas().forEach(visa -> visaList.add(
+                modelMapper.map(visa, VisaDto.class)));
         model.addAttribute("country", countryDto);
+        model.addAttribute("visaList", visaList);
         return "country/create_country";
     }
 
@@ -84,4 +88,6 @@ public class CountryController {
         model.addObject("message", message);
         return model;
     }
+
+    
 }

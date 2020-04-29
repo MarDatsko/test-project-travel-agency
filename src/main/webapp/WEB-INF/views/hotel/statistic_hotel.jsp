@@ -41,7 +41,7 @@
     <h2>Selected hotel - ${hotel.name}</h2>
     <div>
         <h4>Total number of customers : ${numberOfCustomers} </h4>
-        <h4>Average booking time : ${averageReserveTime}</h4>
+        <h4>Average booking time : ${averageReserveTime} days</h4>
     </div>
 
 
