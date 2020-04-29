@@ -4,9 +4,8 @@ import com.travelagency.dto.DateAndCountryDto;
 import com.travelagency.dto.HotelDto;
 import com.travelagency.dto.ReserveRoom;
 import com.travelagency.dto.RoomDto;
-import com.travelagency.entity.Order;
-import com.travelagency.entity.Room;
 import com.travelagency.entity.User;
+import com.travelagency.exceptions.ResourceNotFoundException;
 import com.travelagency.service.HotelService;
 import com.travelagency.service.OrderService;
 import com.travelagency.service.RoomService;
@@ -16,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,18 +76,15 @@ public class RoomController {
 
     @PostMapping("/reserveRoom/{id}")
     public String reserveRoom(@PathVariable(name = "id") Long id, ReserveRoom reserveRoom, Authentication authentication) {
-
         User userByEmail = userService.getUserByEmail(authentication.getName());
-        Order order = new Order();
-        order.setStartBooking(reserveRoom.getFirstDate());
-        order.setEndBooking(reserveRoom.getSecondDate());
-        Room room = new Room();
-        room.setId(id);
-        order.setRoom(room);
-        order.setUser(userByEmail);
-
-        orderService.createOrder(order);
-
+        orderService.saveOrder(id, reserveRoom, authentication, userByEmail);
         return "main/index";
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ModelAndView showExceptionPage(ResourceNotFoundException message) {
+        ModelAndView model = new ModelAndView("main/exception_page");
+        model.addObject("message", message);
+        return model;
     }
 }

@@ -6,6 +6,7 @@ import com.travelagency.dto.HotelDto;
 import com.travelagency.dto.RoomDto;
 import com.travelagency.entity.Country;
 import com.travelagency.entity.Hotel;
+import com.travelagency.exceptions.ResourceNotFoundException;
 import com.travelagency.service.CountryService;
 import com.travelagency.service.HotelService;
 import com.travelagency.service.RoomService;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,17 +107,14 @@ public class HotelController {
     public String showFreeHotels(@PathVariable(name = "id") Long id, DateAndCountryDto dateAndCountryDto, Model model) {
         List<HotelDto> listHotels = new ArrayList<>();
         List<HotelDto> list = new ArrayList<>();
-
         CountryDto country = modelMapper.map(countryService.getCountryById(id), CountryDto.class);
-
         List<Hotel> allHotelsByCountryId = hotelService.getAllHotelsByCountryId(id);
-        allHotelsByCountryId.forEach(hotel -> listHotels.add(modelMapper.map(hotel, HotelDto.class)));
-
+        allHotelsByCountryId.forEach(hotel -> listHotels
+                .add(modelMapper.map(hotel, HotelDto.class)));
         List<Hotel> allFreeHotelOnCertainPeriod = hotelService.getAllFreeHotelOnCertainPeriod(id, dateAndCountryDto.getFirstDate(), dateAndCountryDto.getSecondDate());
-        allFreeHotelOnCertainPeriod.forEach(hotel -> list.add(modelMapper.map(hotel, HotelDto.class)));
-
+        allFreeHotelOnCertainPeriod.forEach(hotel -> list
+                .add(modelMapper.map(hotel, HotelDto.class)));
         listHotels.removeAll(list);
-
         model.addAttribute("listHotels", listHotels);
         model.addAttribute("country", country);
         return "hotel/list_hotels";
@@ -129,5 +128,12 @@ public class HotelController {
         model.addAttribute("listHotels", listHotels);
         model.addAttribute("country", country);
         return "hotel/list_hotels";
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ModelAndView showExceptionPage(ResourceNotFoundException message) {
+        ModelAndView model = new ModelAndView("main/exception_page");
+        model.addObject("message", message);
+        return model;
     }
 }

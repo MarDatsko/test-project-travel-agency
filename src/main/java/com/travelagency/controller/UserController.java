@@ -1,14 +1,17 @@
 package com.travelagency.controller;
 
 import com.travelagency.dto.UserDto;
+import com.travelagency.exceptions.ResourceNotFoundException;
 import com.travelagency.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,5 +50,12 @@ public class UserController {
     public String deleteCustomerForm(@PathVariable(name = "id") Long id) {
         userService.deleteById(id);
         return "redirect:/listUsers";
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ModelAndView showExceptionPage(ResourceNotFoundException message) {
+        ModelAndView model = new ModelAndView("main/exception_page");
+        model.addObject("message", message);
+        return model;
     }
 }

@@ -1,7 +1,9 @@
 package com.travelagency.service.impl;
 
 import com.travelagency.dao.UserDao;
+import com.travelagency.dto.UserRegisterDto;
 import com.travelagency.entity.User;
+import com.travelagency.enums.UserRole;
 import com.travelagency.exceptions.ResourceNotFoundException;
 import com.travelagency.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +38,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         User userByEmail = userDao.getUserByEmail(email);
-        if (userByEmail == null) {
-            //    throw new ResourceNotFoundException(email);
-        }
         return userByEmail;
     }
 
@@ -72,5 +71,16 @@ public class UserServiceImpl implements UserService {
             throw new ResourceNotFoundException("Didn't find any visas");
         }
         return listUsers;
+    }
+
+    @Override
+    public void saveUser(UserRegisterDto userRegisterDto) {
+        User user = new User();
+        user.setFirstName(userRegisterDto.getFirstName());
+        user.setLastName(userRegisterDto.getLastName());
+        user.setEmail(userRegisterDto.getEmail());
+        user.setPassword(userRegisterDto.getPassword());
+        user.setUserRole(UserRole.ROLE_USER);
+        createUser(user);
     }
 }
