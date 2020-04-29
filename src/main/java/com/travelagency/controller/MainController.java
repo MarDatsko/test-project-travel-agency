@@ -4,17 +4,18 @@ import com.travelagency.dto.CountryDto;
 import com.travelagency.dto.DateAndCountryDto;
 import com.travelagency.dto.UserRegisterDto;
 import com.travelagency.entity.User;
-import com.travelagency.enums.UserRole;
+import com.travelagency.exceptions.ResourceNotFoundException;
 import com.travelagency.service.CountryService;
 import com.travelagency.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,16 +47,9 @@ public class MainController {
     public String registerUser(UserRegisterDto userRegisterDto, Model model) {
         User userByEmail = userService.getUserByEmail(userRegisterDto.getEmail());
         if (userByEmail == null) {
-            User user = new User();
-            user.setFirstName(userRegisterDto.getFirstName());
-            user.setLastName(userRegisterDto.getLastName());
-            user.setEmail(userRegisterDto.getEmail());
-            user.setPassword(userRegisterDto.getPassword());
-            user.setUserRole(UserRole.ROLE_USER);
-            userService.createUser(user);
+            userService.saveUser(userRegisterDto);
             return "main/login";
         }
-
         model.addAttribute("message", "User with this email "
                 + userRegisterDto.getEmail() + " already created");
         return "main/exception_page";
@@ -70,5 +64,12 @@ public class MainController {
         model.addAttribute("countryList", countryDtos);
         model.addAttribute("dateAndCountryDto", dateAndCountryDto);
         return "main/main_page";
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ModelAndView showExceptionPage(ResourceNotFoundException message) {
+        ModelAndView model = new ModelAndView("main/exception_page");
+        model.addObject("message", message);
+        return model;
     }
 }

@@ -1,9 +1,9 @@
 package com.travelagency.controller;
 
 import com.travelagency.dto.CountryDto;
-import com.travelagency.dto.HotelDto;
 import com.travelagency.dto.VisaDto;
 import com.travelagency.entity.Country;
+import com.travelagency.exceptions.ResourceNotFoundException;
 import com.travelagency.service.CountryService;
 import com.travelagency.service.HotelService;
 import com.travelagency.service.VisaService;
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,5 +76,12 @@ public class CountryController {
     public String deleteCountry(@RequestParam Long id) {
         countryService.deleteCountryById(id);
         return "country/list_countries";
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ModelAndView showExceptionPage(ResourceNotFoundException message) {
+        ModelAndView model = new ModelAndView("main/exception_page");
+        model.addObject("message", message);
+        return model;
     }
 }

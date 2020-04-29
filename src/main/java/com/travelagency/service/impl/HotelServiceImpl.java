@@ -68,11 +68,7 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public List<Hotel> getAllFreeHotelOnCertainPeriod(Long id, LocalDate firstDate, LocalDate secondDate) {
-        List<Hotel> allHotel = hotelDao.getAllFreeHotelOnCertainPeriod(id, firstDate, secondDate);
-        if (allHotel == null || allHotel.isEmpty()) {
-//            throw new ResourceNotFoundException("Didn't find any hotels");
-        }
-        return allHotel;
+        return hotelDao.getAllFreeHotelOnCertainPeriod(id, firstDate, secondDate);
     }
 
     @Override
